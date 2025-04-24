@@ -1,3 +1,15 @@
+/**
+ * The Casher class represents a cashier user in the system.
+ * It extends the User class and includes additional attributes and methods
+ * specific to a cashier, such as salary management.
+ * 
+ * <p>This class is part of the Class_model package.</p>
+ * 
+ * <p><strong>Note:</strong> The setSalary method should only be used with restricted access
+ * to ensure proper control over salary modifications.</p>
+ * 
+ * @see User
+ */
 package Class_model;
 
 import java.util.Set;

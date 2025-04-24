@@ -3,62 +3,199 @@ package Class_model;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Abstract class representing a User with attributes and roles.
+ */
 public abstract class User {
+    /**
+     * The username of the user.
+     */
     private String Username;
+
+    /**
+     * The password of the user.
+     */
     private String Password;
+
+    /**
+     * The email address of the user.
+     */
     private String UserEmail;
+
+    /**
+     * The phone number of the user.
+     */
     private String PhoneNumber;
+
+    /**
+     * Indicates whether the user is active.
+     */
+    private boolean isActive;
+
+    /**
+     * The set of roles assigned to the user.
+     */
     protected Set<Role> Roles = new HashSet<>();
-    
-    //contructors , setters , getters and other functionalities
-    public User(String Username, String Password, String User_Email,String PhoneNumber,Set<Role> Roles){
+
+    /**
+     * Constructor to initialize a User object with the given attributes.
+     * 
+     * @param Username   The username of the user.
+     * @param Password   The password of the user.
+     * @param User_Email The email address of the user.
+     * @param PhoneNumber The phone number of the user.
+     * @param Roles      The set of roles assigned to the user.
+     */
+    public User(String Username, String Password, String User_Email, String PhoneNumber, Set<Role> Roles) {
         this.Username = Username;
         this.Password = Password;
         this.UserEmail = User_Email;
         this.Roles = Roles;
         this.PhoneNumber = PhoneNumber;
+        isActive = true;
     }
-    void setUsername(String Username){
+
+    /**
+     * Sets the username of the user.
+     * 
+     * @param Username The new username.
+     */
+    void setUsername(String Username) {
         this.Username = Username;
     }
-    String getUsername(){
+
+    /**
+     * Gets the username of the user.
+     * 
+     * @return The username.
+     */
+    String getUsername() {
         return Username;
     }
-    void setPassword(String Password){
+
+    /**
+     * Sets the password of the user.
+     * 
+     * @param Password The new password.
+     */
+    void setPassword(String Password) {
         this.Password = Password;
     }
-    String getPassword(){
+
+    /**
+     * Gets the password of the user.
+     * 
+     * @return The password.
+     */
+    String getPassword() {
         return Password;
     }
-    void setUserEmail(String UserEmail){
+
+    /**
+     * Sets the email address of the user.
+     * 
+     * @param UserEmail The new email address.
+     */
+    void setUserEmail(String UserEmail) {
         this.UserEmail = UserEmail;
     }
-    String getUserEmail(){
+
+    /**
+     * Gets the email address of the user.
+     * 
+     * @return The email address.
+     */
+    String getUserEmail() {
         return UserEmail;
     }
-    void setPhoneNumber(String PhoneNumber){
+
+    /**
+     * Sets the phone number of the user.
+     * 
+     * @param PhoneNumber The new phone number.
+     */
+    void setPhoneNumber(String PhoneNumber) {
         this.PhoneNumber = PhoneNumber;
     }
-    String getPhoneNumber(){
+
+    /**
+     * Gets the phone number of the user.
+     * 
+     * @return The phone number.
+     */
+    String getPhoneNumber() {
         return PhoneNumber;
     }
-    public String toString(){
+
+    /**
+     * Returns a string representation of the user.
+     * 
+     * @return A string containing user details.
+     */
+    public String toString() {
         return "UserID: " + Username + "\nPassword: " + Password + "\nUserEmail: " + UserEmail + "\nPhoneNumber: " + PhoneNumber;
     }
-    public boolean CheckRole(Role role){
+
+    /**
+     * Checks if the user has a specific role.
+     * 
+     * @param role The role to check.
+     * @return True if the user has the role, false otherwise.
+     */
+    public boolean CheckRole(Role role) {
         return Roles.contains(role);
     }
-    public void setRoles(Set<Role> Roles){
+
+    /**
+     * Sets the roles of the user.
+     * 
+     * @param Roles The new set of roles.
+     */
+    public void setRoles(Set<Role> Roles) {
         this.Roles = Roles;
     }
-    public Set<Role> getRoles(){
+
+    /**
+     * Gets the roles of the user.
+     * 
+     * @return The set of roles.
+     */
+    public Set<Role> getRoles() {
         return Roles;
     }
-    public void Add_Role(Role role){
+
+    /**
+     * Adds a role to the user.
+     * 
+     * @param role The role to add.
+     */
+    public void Add_Role(Role role) {
         Roles.add(role);
     }
-    public boolean Remove_Role(Role role){
+
+    /**
+     * Removes a role from the user.
+     * 
+     * @param role The role to remove.
+     * @return True if the role was removed, false otherwise.
+     */
+    public boolean Remove_Role(Role role) {
         return Roles.remove(role);
     }
 
+    /**
+     * Deactivates the user.
+     */
+    public void Deactivate() {
+        this.isActive = false;
+    }
+
+    /**
+     * Gets the active status of the user.
+     * 
+     * @return True if the user is active, false otherwise.
+     */
+    public boolean getactive() {
+        return isActive;
+    }
 }

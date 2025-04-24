@@ -1,8 +1,14 @@
+/**
+ * The Pharmacist class represents a pharmacist user in the system.
+ * It extends the User class and includes additional attributes and methods
+ * specific to a pharmacist, such as salary and medication safety checks.
+ */
 package Class_model;
 
 import java.util.Set;
 
 public class Pharmacist extends User{
+    
     private double salary;
     public Pharmacist(String Username, String Password, String User_Email, String PhoneNumber, Set<Role> Roles) {
         super(Username,  Password, User_Email, PhoneNumber,Roles);
@@ -24,7 +30,10 @@ public class Pharmacist extends User{
         }
         return false;
     }
-    
+    // Method to calculate the annual salary of the pharmacist
+    public double calculateAnnualSalary() {
+        return salary * 12;
+    }
     @Override
     public boolean equals(Object obj){
         if(this==obj && obj !=null && this.getClass() == obj.getClass()){
