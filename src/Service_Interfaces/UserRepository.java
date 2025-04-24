@@ -2,24 +2,24 @@ package Service_Interfaces;
 
 import Class_model.User;
 
-public interface UserServiceInterface {
+public abstract interface UserRepository {
     // Method to save a user
-    boolean SaveUser(User user);
+    boolean Save(User user);
 
     // Method to add a new user
-    boolean AddUser(User user);
+    boolean Add(User user);
 
     // Method to update an existing user
-    boolean UpdateUser(User user);
+    boolean Update(User user);
 
     // Method to delete a user
-    boolean DeleteUser(User user);
+    boolean Delete(User user);
 
     // Method to authenticate a user
-    boolean AuthenticateUser(User user);
+    boolean Authenticate(User user);
 
     // Method to deactivate a user
-    void DeactivateUser(User user);
+    void Deactivate(User user);
 
     // Method to change the password of a user
     void ChangePassword(User user);
