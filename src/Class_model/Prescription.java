@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Prescription {
+    private int ID;
     private String PatientName; // The name of the patient for whom the prescription is issued.
     private Pharmacist issuedBy; // The pharmacist who issued the prescription.
     private String status; // The status of the prescription (e.g., Pending, Expired, Filled).
@@ -20,11 +21,28 @@ public class Prescription {
      * @param issuedBy The pharmacist who issued the prescription.
      * @param items The set of items included in the prescription.
      */
-    public Prescription(String PatientName, Pharmacist issuedBy, Set<Item> items){
+    public Prescription(int ID, String PatientName, Pharmacist issuedBy, Set<Item> items){
+        this.ID = ID;
         this.PatientName = PatientName;
         this.issuedBy = issuedBy;
         this.items = items;
         status = "Pending";
+    }
+
+    /**
+     * Sets ID for patient.
+     * @param ID  The new ID of the patient;
+     */
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    /**
+     * Gets ID for patient.
+     * @return the ID of the patient.
+     */
+    public int getId(){
+        return ID;
     }
 
     /**

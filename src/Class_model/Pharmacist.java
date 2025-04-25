@@ -10,8 +10,8 @@ import java.util.Set;
 public class Pharmacist extends User{
     
     private double salary;
-    public Pharmacist(String Username, String Password, String User_Email, String PhoneNumber, Set<Role> Roles) {
-        super(Username,  Password, User_Email, PhoneNumber,Roles);
+    public Pharmacist(int UserId, String Username, String Password, String User_Email, String PhoneNumber, Set<Role> Roles) {
+        super(UserId,Username,  Password, User_Email, PhoneNumber,Roles);
     }
     public void setSalary(double salary){
         this.salary = salary;

@@ -16,8 +16,8 @@ import java.util.Set;
 
 public class Casher extends User{
     private double salary;
-    public Casher(String Username, String Password, String User_Email, String PhoneNumber,double salary, Set<Role> Roles) {
-        super(Username, Password, User_Email, PhoneNumber,Roles);
+    public Casher(int UserId, String Username, String Password, String User_Email, String PhoneNumber,double salary, Set<Role> Roles) {
+        super(UserId,Username, Password, User_Email, PhoneNumber,Roles);
         this.salary = salary;
     }
 

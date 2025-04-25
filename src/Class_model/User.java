@@ -7,6 +7,11 @@ import java.util.Set;
  * Abstract class representing a User with attributes and roles.
  */
 public abstract class User {
+
+     /**
+     * The ID of the user.
+     */
+    int UserId;
     /**
      * The username of the user.
      */
@@ -46,13 +51,32 @@ public abstract class User {
      * @param PhoneNumber The phone number of the user.
      * @param Roles      The set of roles assigned to the user.
      */
-    public User(String Username, String Password, String User_Email, String PhoneNumber, Set<Role> Roles) {
+    public User(int UserId,String Username, String Password, String User_Email, String PhoneNumber, Set<Role> Roles) {
+        this.UserId = UserId;
         this.Username = Username;
         this.Password = Password;
         this.UserEmail = User_Email;
         this.Roles = Roles;
         this.PhoneNumber = PhoneNumber;
         isActive = true;
+    }
+
+    /**
+     * Sets the id of the user.
+     * 
+     * @param ID The new Id.
+     */
+    void setID(int ID) {
+        this.UserId = ID;
+    }
+
+    /**
+     * Gets the Id of the user.
+     * 
+     * @return The ID.
+     */
+    int getID() {
+        return UserId;
     }
 
     /**

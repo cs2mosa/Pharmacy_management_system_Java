@@ -3,19 +3,54 @@ import java.util.List;
 
 import Class_model.Item;
 
+/**
+ * InventoryServiceInterface defines the contract for managing inventory operations.
+ * It provides methods to add, remove, update, and retrieve items, as well as manage stock levels.
+ */
 public abstract interface InventoryServiceInterface {
-    // Method to add a new item to the inventory
+
+    /**
+     * Adds a new item to the inventory.
+     * @param item The item to be added.
+     */
     void AddNewItem(Item item);
 
-    // Method to remove an item from the inventory by its name
+    /**
+     * Removes an item from the inventory by its name.
+     * @param Itemname The name of the item to be removed.
+     */
     void RemoveItemByName(String Itemname);
 
-    // Method to update the details of an existing item
+    /**
+     * Updates the details of an existing item in the inventory.
+     * @param item The item with updated details.
+     */
     void UpdateItem(Item item);
 
-    // Method to retrieve a list of items based on their category
+    /**
+     * Retrieves an item from the inventory by its name.
+     * @param ItemName The name of the item to retrieve.
+     * @return The item with the specified name, or null if not found.
+     */
+    Item GetItemByName(String ItemName);
+
+    /**
+     * Retrieves a list of items belonging to a specific category.
+     * @param category The category of items to retrieve.
+     * @return A list of items in the specified category.
+     */
     List<Item> GetItemsByCategory(String category);
 
-    // Method to process a refund for a specific item
-    void RefundItem(Item item);
+    /**
+     * Updates the stock quantity of a specific item.
+     * @param item The name of the item to update.
+     * @param quantityChange The change in quantity (positive or negative).
+     */
+    void updateStock(String item, int quantityChange);
+
+    /**
+     * Retrieves a list of items that are low in stock.
+     * @return A list of items with low stock levels.
+     */
+    List<Item> getLowStockItems();
 }

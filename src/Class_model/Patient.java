@@ -55,6 +55,8 @@ public class Patient extends User {
      */
     private List<Order> orders = new ArrayList<>();
 
+    private double PatientBalance;
+
     /**
      * Constructs a Patient with the specified details.
      *
@@ -68,12 +70,31 @@ public class Patient extends User {
      * @param orders     The list of orders of the patient.
      * @param Roles      The roles assigned to the patient.
      */
-    public Patient(String Username, String Password, String User_Email, String PhoneNumber, float Age, String address, Set<String> allergies, List<Order> orders, Set<Role> Roles) {
-        super(Username, Password, User_Email, PhoneNumber, Roles);
+    public Patient(int UserId,String Username, String Password, String User_Email, String PhoneNumber, float Age, String address, Set<String> allergies, List<Order> orders, Set<Role> Roles) {
+        super(UserId,Username, Password, User_Email, PhoneNumber, Roles);
         this.Age = Age;
         this.address = address;
         this.allergies = allergies;
         this.orders = orders;
+        this.PatientBalance = 0.0;
+    }
+
+    /**
+     * Sets the balance of the patient.
+     *
+     * @param balance The balance to set.
+     */
+    public void SetBalance(double balance){
+        this.PatientBalance = balance;
+    }
+
+    /**
+     * Gets the balance of the patient.
+     *
+     * @return The balance of the patient.
+     */
+    public double GetBalance(){
+        return PatientBalance;
     }
 
     /**

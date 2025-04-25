@@ -17,16 +17,16 @@
  * Note:
  * - The setSalary method is the only way to set the salary for any employee in the pharmacy.
  * - Consider implementing additional security measures to prevent unauthorized access to this method.
- * @author mosa abdulaziz
- * @version 1.0
+ * @author Mosa Abdulaziz
+ * @version 1.2
  */ 
 package Class_model;
 
 import java.util.Set;
 
 public class Admin extends User{
-    public Admin(String Username, String Password, String User_Email, String PhoneNumber, Set<Role> Roles) {
-        super(Username, Password, User_Email, PhoneNumber,Roles);
+    public Admin(int UserId,String Username, String Password, String User_Email, String PhoneNumber, Set<Role> Roles) {
+        super(UserId,Username, Password, User_Email, PhoneNumber,Roles);
     }
     /**
      * this function is the only way to set salary for any Employee in the pharmacy, need to think about preventing other's access
@@ -43,5 +43,4 @@ public class Admin extends User{
             return false;
         }
     }
-
 }

@@ -1,21 +1,47 @@
 package Service_Interfaces;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import Class_model.Patient;
 
+/**
+ * The PatientRepository interface defines the contract for managing patient records.
+ * It provides methods to add, remove, update, retrieve, and list patients.
+ */
 public abstract interface PatientRepository {
-    // Method to add a new patient to the repository
-    // Takes a Patient object as a parameter
+
+    /**
+     * Adds a new patient to the repository.
+     * @param patient The Patient object to be added.
+     */
     void AddPatient(Patient patient);
 
-    // Method to remove a patient from the repository
-    // Takes the patient's name as a parameter
-    void RemovePatient(String Patientname);
+    /**
+     * Removes a patient from the repository based on their unique ID.
+     * @param PatientID The unique identifier of the patient to be removed.
+     */
+    void RemovePatient(int PatientID);
 
-    // Method to update a specific attribute of a patient
-    // Takes the patient's name, a query index (0-9), and the new value as parameters
-    void UpdatePatient(String PatientName, int query, Object value);
+    /**
+     * Updates a specific attribute of a patient in the repository.
+     * @param PatientID The unique identifier of the patient to be updated.
+     * @param query The name of the attribute to be updated.
+     * @param value The new value to set for the specified attribute.
+     */
+    void UpdatePatient(int PatientID, String query, Object value);
 
-    // Method to retrieve a patient's details from the repository
-    // Takes the patient's name as a parameter and returns a Patient object
-    Patient GetPatient(String Patientname);
+    /**
+     * Retrieves a patient from the repository based on their unique ID.
+     * @param PatientID The unique identifier of the patient to retrieve.
+     * @return The Patient object corresponding to the given ID, or null if not found.
+     */
+    Patient GetPatient(int PatientID);
+
+    /**
+     * Retrieves a list of all patients in the repository.
+     * @return A List containing all Patient objects in the repository.
+     */
+    List<Patient> GetAllPatients();
 }

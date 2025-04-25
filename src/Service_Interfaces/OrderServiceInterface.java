@@ -1,24 +1,63 @@
 package Service_Interfaces;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import Class_model.Order;
 import Class_model.Item;
 
-//orders memory interface should be a queue.
+
+/**
+ * This interface defines the contract for order-related operations.
+ * It provides methods for placing, deleting, updating, retrieving, and calculating orders.
+ */
 public abstract interface OrderServiceInterface {
-    // Places an order with the given items and returns the created Order object.
-    Order PlaceOrder(Map<String,Integer> items);
 
-    // Retrieves an order by its unique ID.
-    Order GetOrderById(int orderId);
+    /**
+     * Places an order with the specified items.
+     * 
+     * @param items A map where the key is the item name and the value is the quantity.
+     * @return The ID of the placed order.
+     */
+    int PlaceOrder(Map<String, Integer> items);
 
-    // Deletes an order by its unique ID and returns a boolean indicating success.
-    boolean DeleteOrder(int orderId);//can be void
+    /**
+     * Deletes an order by its ID.
+     * 
+     * @param orderId The ID of the order to be deleted.
+     */
+    void DeleteOrder(int orderId); // can be void
 
-    // Updates the items in an order based on the query type (add or remove) and the item details.
-    boolean UpdateOrderItems(int orderId, boolean query, Item item);//query(0) represents adding , query(1) represents removing
+    /**
+     * Updates the items of an existing order.
+     * 
+     * @param orderId The ID of the order to be updated.
+     * @param query A boolean flag where true represents adding an item and false represents removing an item.
+     * @param item The item to be added or removed.
+     */
+    void UpdateOrderItems(int orderId, boolean query, Item item); // query(0) represents adding, query(1) represents removing
 
-    // Calculates the total price of all orders in the given queue.
-    long CalcTotalPrice(Queue<Order> orders);
+    /**
+     * Retrieves an order by its ID.
+     * 
+     * @param orderId The ID of the order to retrieve.
+     * @return The order with the specified ID.
+     */
+    Order GetById(int orderId);
+
+    /**
+     * Retrieves a list of orders placed by a specific customer.
+     * 
+     * @param CustomerName The name of the customer whose orders are to be retrieved.
+     * @return A list of orders associated with the specified customer.
+     */
+    List<Order> GetByCustomer(String CustomerName);
+
+    /**
+     * Calculates the total income from a queue of orders.
+     * 
+     * @param orders A queue of orders to calculate the total income from.
+     * @return The total income as a long value.
+     */
+    long CalcTotalIncome(Queue<Order> orders);
 }

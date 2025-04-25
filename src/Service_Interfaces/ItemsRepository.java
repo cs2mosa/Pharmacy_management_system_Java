@@ -1,29 +1,55 @@
 package Service_Interfaces;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import Class_model.Item;
 
 //item repo is a Set of Items, used Set for better complexity in searching.
+/**
+ * The ItemsRepository interface defines the contract for managing a collection of items.
+ * It provides methods to add, remove, update, and retrieve items, as well as query items by category
+ * and get the total number of items.
+ */
 public abstract interface ItemsRepository {
-    // Adds a new item to the repository
+
+    /**
+     * Adds a new item to the repository.
+     * @param item The item to be added.
+     */
     void AddNewItem(Item item);
 
-    // Removes an item from the repository by its name
+    /**
+     * Removes an item from the repository by its name.
+     * @param Itemname The name of the item to be removed.
+     */
     void RemoveItemByName(String Itemname);
 
-    // Updates the details of an existing item
-    void UpdateItem(Item item);
+    /**
+     * Updates an existing item in the repository based on a query and a new value.
+     * @param item The item to be updated.
+     * @param query The query specifying the field to be updated.
+     * @param value The new value to be set for the specified field.
+     */
+    void UpdateItem(Item item, String query, Object value);
 
-    // Retrieves all items in the repository
+    /**
+     * Retrieves all items from the repository.
+     * @return A list of all items.
+     */
     List<Item> GetAllItems();
 
-    // Gets the total number of items in the repository
+    /**
+     * Gets the total number of items in the repository.
+     * @return The number of items.
+     */
     long GetNumberOfItems();
 
-    // Retrieves items belonging to a specific category
+    /**
+     * Retrieves a list of items that belong to a specific category.
+     * @param category The category to filter items by.
+     * @return A list of items in the specified category.
+     */
     List<Item> GetItemsByCategory(String category);
-
-    // Processes a refund for a specific item
-    void RefundItem(Item item);
-    
 }
