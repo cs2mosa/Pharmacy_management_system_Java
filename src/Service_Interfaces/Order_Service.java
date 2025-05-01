@@ -11,7 +11,7 @@ import Class_model.Item;
  * This interface defines the contract for order-related operations.
  * It provides methods for placing, deleting, updating, retrieving, and calculating orders.
  */
-public abstract interface OrderServiceInterface {
+abstract interface OrderServiceInterface {
 
     /**
      * Places an order with the specified items.
@@ -60,4 +60,40 @@ public abstract interface OrderServiceInterface {
      * @return The total income as a long value.
      */
     long CalcTotalIncome(Queue<Order> orders);
+}
+public class Order_Service implements OrderServiceInterface {
+
+    @Override
+    public int PlaceOrder(Map<String, Integer> items) {
+        // Implementation for placing an order
+        return 0; // Placeholder return value
+    }
+
+    @Override
+    public void DeleteOrder(int orderId) {
+        // Implementation for deleting an order
+    }
+
+    @Override
+    public void UpdateOrderItems(int orderId, boolean query, Item item) {
+        // Implementation for updating order items
+    }
+
+    @Override
+    public Order GetById(int orderId) {
+        // Implementation for retrieving an order by ID
+        return null; // Placeholder return value
+    }
+
+    @Override
+    public List<Order> GetByCustomer(String CustomerName) {
+        // Implementation for retrieving orders by customer name
+        return null; // Placeholder return value
+    }
+
+    @Override
+    public long CalcTotalIncome(Queue<Order> orders) {
+        // Implementation for calculating total income from orders
+        return 0; // Placeholder return value
+    }
 }

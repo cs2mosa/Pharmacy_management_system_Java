@@ -6,7 +6,7 @@ import Class_model.*;
  * The PaymentServiceInterface defines the contract for payment processing services.
  * It includes methods for processing payments and generating receipts.
  */
-public abstract interface PaymentServiceInterface {
+abstract interface PaymentServiceInterface {
 
     /**
      * Processes a payment based on the provided payment ID.

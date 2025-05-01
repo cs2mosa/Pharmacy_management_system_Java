@@ -10,7 +10,7 @@ import Class_model.Patient;
  * The PatientRepository interface defines the contract for managing patient records.
  * It provides methods to add, remove, update, retrieve, and list patients.
  */
-public abstract interface PatientRepository {
+abstract interface PatientRepository {
 
     /**
      * Adds a new patient to the repository.
@@ -44,4 +44,48 @@ public abstract interface PatientRepository {
      * @return A List containing all Patient objects in the repository.
      */
     List<Patient> GetAllPatients();
+}
+public class Patient_Repository implements PatientRepository {
+    // Singleton instance of Patient_Repository
+    private static Patient_Repository instance = null;
+    // Set to store patients
+    private Set<Patient> patients = new HashSet<>(); // Using Set for better search complexity
+
+    // Private constructor to prevent instantiation from outside
+    private Patient_Repository() {
+
+    }
+
+    // Method to get the singleton instance of Patient_Repository
+    public static Patient_Repository getInstance() {
+        if (instance == null) {
+            instance = new Patient_Repository();
+        }
+        return instance;
+    }
+
+    @Override
+    public void AddPatient(Patient patient) {
+        patients.add(patient);
+    }
+
+    @Override
+    public void RemovePatient(int PatientID) {
+        
+    }
+    @Override
+    public void UpdatePatient(int PatientID, String query, Object value) {
+        
+    }
+    @Override
+    public Patient GetPatient(int PatientID) {
+        //implementation for getting a patient by ID
+        return null; // Return null if not found
+    }
+    @Override
+    public List<Patient> GetAllPatients() {
+        // Convert the Set to a List and return it
+        return null;
+    }
+    
 }

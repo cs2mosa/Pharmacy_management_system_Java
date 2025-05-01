@@ -9,7 +9,7 @@ import Class_model.User;
  * UserRepository is an interface that defines the contract for managing User entities.
  * It provides methods to add, update, delete, and retrieve users by their username or ID.
  */
-public abstract interface UserRepository {
+abstract interface UserRepository {
 
     /**
      * Adds a new user to the repository.
@@ -42,4 +42,50 @@ public abstract interface UserRepository {
      * @return The User object corresponding to the given ID, or null if not found.
      */
     User GetByID(int ID);
+}
+public class User_Repository implements UserRepository {
+
+    private static User_Repository instance = null;
+    private Set<User> users = new HashSet<>(); // Using Set for better search complexity
+
+    private User_Repository(){
+        // Private constructor to prevent instantiation from outside
+    }
+
+    public static User_Repository GetInstance(){
+        if (instance == null) {
+            instance = new User_Repository();
+            return instance;
+        } else {
+            return instance;
+        }
+    }
+
+    @Override
+    public void Add(User user) {
+        // Implementation to add a user
+    }
+
+    @Override
+    public void Update(User user) {
+        // Implementation to update a user
+    }
+
+    @Override
+    public void Delete(User user) {
+        // Implementation to delete a user
+    }
+
+    @Override
+    public User GetByUsername(String username) {
+        // Implementation to get a user by username
+        return null;
+    }
+
+    @Override
+    public User GetByID(int ID) {
+        // Implementation to get a user by ID
+        return null;
+    }
+
 }

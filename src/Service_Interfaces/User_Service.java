@@ -7,7 +7,7 @@ import Class_model.User;
  * This interface provides methods for adding, updating, deleting, authenticating,
  * deactivating, activating users, changing passwords, and checking access permissions.
  */
-public interface UserServiceInterface {
+interface UserServiceInterface {
 
     /**
      * Adds a new user to the system.
@@ -63,4 +63,49 @@ public interface UserServiceInterface {
      * @return true if the user has access, false otherwise.
      */
     boolean CheckAccess(User user);
+}
+public class User_Service implements UserServiceInterface {
+
+    @Override
+    public void AddUser(User user) {
+        // Implementation for adding a user
+    }
+
+    @Override
+    public void UpdateUser(String user, String query, Object value) {
+        // Implementation for updating a user
+    }
+
+    @Override
+    public void DeleteUser(String user) {
+        // Implementation for deleting a user
+    }
+
+    @Override
+    public boolean AuthenticateUser(User user) {
+        // Implementation for authenticating a user
+        return false;
+    }
+
+    @Override
+    public void DeactivateUser(String user) {
+        // Implementation for deactivating a user
+    }
+    
+    @Override
+    public void activateUser(Long userId) {
+        // Implementation for activating a user
+    }
+
+    @Override
+    public boolean ChangePassword(String user, String oldPassword, String NewPassword) {
+        // Implementation for changing a user's password
+        return false;
+    }
+
+    @Override
+    public boolean CheckAccess(User user) {
+        // Implementation for checking user access permissions
+        return false;
+    }
 }

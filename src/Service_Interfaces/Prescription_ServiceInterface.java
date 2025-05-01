@@ -8,7 +8,7 @@ import Class_model.*;
  * This interface defines the contract for managing prescriptions in the system.
  * It provides methods for adding, deleting, updating, retrieving, and filling prescriptions.
  */
-public abstract interface PrescriptionServiceInterface {
+abstract interface PrescriptionServiceInterface {
 
     /**
      * Adds a new prescription to the system.
@@ -52,4 +52,40 @@ public abstract interface PrescriptionServiceInterface {
      * Fills a prescription, marking it as completed or dispensed.
      */
     void FillPrescription();
+}
+
+public class Prescription_ServiceInterface implements PrescriptionServiceInterface {
+
+    @Override
+    public void AddPrescription(Prescription prescription) {
+        // Implementation for adding a prescription
+    }
+
+    @Override
+    public void DeletePrescription(int preID) {
+        // Implementation for deleting a prescription
+    }
+
+    @Override
+    public void UpdatePrescription(int PreID, String query, Object value) {
+        // Implementation for updating a prescription
+    }
+    
+    @Override
+    public List<Prescription> GetPrescriptionByID(int PatientId) {
+        // Implementation for retrieving prescriptions by patient ID
+        return null;
+    }
+
+    @Override
+    public List<Prescription> GetAllPrescriptions() {
+        // Implementation for retrieving all prescriptions
+        return null;
+    }
+
+    @Override
+    public void FillPrescription() {
+        // Implementation for filling a prescription
+    }
+
 }

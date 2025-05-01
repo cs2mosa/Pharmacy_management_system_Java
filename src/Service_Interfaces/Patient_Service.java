@@ -9,7 +9,7 @@ import Class_model.Order;
  * It provides methods to add, remove, update, and retrieve patient information,
  * as well as manage patient balances and orders.
  */
-public abstract interface PatientServiceInterface {
+abstract interface PatientServiceInterface {
 
     /**
      * Adds a new patient to the system.
@@ -57,4 +57,42 @@ public abstract interface PatientServiceInterface {
      * @return A list of orders for the specified patient.
      */
     List<Order> GetPatientOrders(int PatientId);
+}
+
+public class Patient_Service implements PatientServiceInterface {
+
+    @Override
+    public void AddPatient(Patient patient) {
+        // Implementation for adding a patient
+    }
+    @Override
+    public void RemovePatient(String Patientname) {
+        // Implementation for removing a patient
+    }
+    @Override
+    public void UpdatePatient(String PatientName, String query, Object value) {
+        // Implementation for updating a patient
+    }
+    @Override
+    public Patient GetPatient(String Patientname) {
+        // Implementation for retrieving a patient
+        return null; // Placeholder return value
+    }
+    @Override
+    public List<Patient> GetAllPatients() {
+        // Implementation for retrieving all patients
+        return null; // Placeholder return value
+    }
+    @Override
+    public double GetPatientBalance(String PatientName) {
+        // Implementation for retrieving a patient's balance
+        return 0.0; // Placeholder return value
+    }
+    @Override
+    public List<Order> GetPatientOrders(int PatientId) {
+        // Implementation for retrieving a patient's orders
+        return null; // Placeholder return value
+    }
+    // Additional methods and logic can be added here as needed
+    // For example, you might want to implement methods for managing patient prescriptions or other related functionalities.
 }

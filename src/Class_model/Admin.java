@@ -21,7 +21,9 @@
  * @version 1.2
  */ 
 package Class_model;
-
+/**
+ * we need to implement builder design pattern in every class here.
+ */
 import java.util.Set;
 
 public class Admin extends User{

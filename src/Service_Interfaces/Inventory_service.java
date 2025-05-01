@@ -7,7 +7,7 @@ import Class_model.Item;
  * InventoryServiceInterface defines the contract for managing inventory operations.
  * It provides methods to add, remove, update, and retrieve items, as well as manage stock levels.
  */
-public abstract interface InventoryServiceInterface {
+abstract interface InventoryServiceInterface {
 
     /**
      * Adds a new item to the inventory.
@@ -53,4 +53,44 @@ public abstract interface InventoryServiceInterface {
      * @return A list of items with low stock levels.
      */
     List<Item> getLowStockItems();
+}
+
+public class Inventory_service implements InventoryServiceInterface{
+
+    
+    @Override
+    public void AddNewItem(Item item){
+
+    }
+
+    @Override
+    public void RemoveItemByName(String Itemname){
+
+    }
+
+    @Override
+    public void UpdateItem(Item item){
+
+    }
+
+    @Override
+    public Item GetItemByName(String ItemName){
+        return null;
+    }
+
+    @Override
+    public List<Item> GetItemsByCategory(String category){
+        return null;
+    }
+
+    @Override
+    public void updateStock(String item, int quantityChange){
+
+    }    
+
+    @Override
+    public List<Item> getLowStockItems(){
+        return null;
+    }
+
 }
