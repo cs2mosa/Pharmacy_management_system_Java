@@ -25,7 +25,7 @@ abstract interface InventoryServiceInterface {
      * Updates the details of an existing item in the inventory.
      * @param item The item with updated details.
      */
-    void UpdateItem(Item item);
+    void UpdateItem(String itemName, String query, Object value);
 
     /**
      * Retrieves an item from the inventory by its name.
@@ -69,7 +69,7 @@ public class Inventory_service implements InventoryServiceInterface{
     }
 
     @Override
-    public void UpdateItem(Item item){
+    public void UpdateItem(String itemName, String query, Object value){
 
     }
 

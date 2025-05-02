@@ -46,3 +46,32 @@ abstract interface PaymentServiceInterface {
      */
     void UpdatePayment(int PatientId, String query, Object value);
 }
+
+public class Payment_service implements PaymentServiceInterface{
+
+    @Override
+    public void AddPayment(int PatientId, Payment payment) {
+        // Implementation for adding a payment
+    }
+
+    @Override
+    public void WithdrawPayment(int PatientId, int PaymentId) {
+        // Implementation for withdrawing a payment
+    }
+    
+    @Override
+    public void ProcessPayment(int PaymentId) {
+        // Implementation for processing a payment
+    }
+
+    @Override
+    public String generateReceipt(int paymentId) {
+        // Implementation for generating a receipt
+        return null;
+    }
+
+    @Override
+    public void UpdatePayment(int PatientId, String query, Object value) {
+        // Implementation for updating a payment
+    }
+}

@@ -1,5 +1,6 @@
 package Service_Interfaces;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +41,7 @@ abstract interface ItemsRepository {
      * @param query The query specifying the field to be updated.
      * @param value The new value to be set for the specified field.
      */
-    void UpdateItem(Item item, String query, Object value);
+    void UpdateItem(String itemName, Item newItem);
 
     /**
      * Retrieves all items from the repository.
@@ -68,7 +69,7 @@ public class Items_Repository implements ItemsRepository{
     private static Items_Repository instance = null;
 
     // Set to store items
-    private Set<Item> allItems = new HashSet<>();
+    private Set<Item> ITEMS = new HashSet<>();
 
     private Items_Repository(){
         // Private constructor to prevent instantiation from outside
@@ -84,42 +85,53 @@ public class Items_Repository implements ItemsRepository{
         }
     }
 
-
     @Override
     public Item GetItemByName(String ItemName){
-        
+        for(Item itm : ITEMS){
+            if(itm.getMedicName() == ItemName){
+                return itm;
+            }
+        }
         return null;
     }
 
     @Override
     public void AddNewItem(Item item){
-        
+        ITEMS.add(item); // Adds the item to the set
     }
 
     @Override
     public void RemoveItemByName(String Itemname){
-
+        Item temp  = GetItemByName(Itemname);
+        if(temp != null){
+            ITEMS.remove(temp);
+        }
     }
 
     @Override
-    public void UpdateItem(Item item, String query, Object value){
-
+    public void UpdateItem(String itemName, Item newItem){
+        RemoveItemByName(itemName);
+        AddNewItem(newItem);
     }
 
     @Override
     public List<Item> GetAllItems(){
-        return null; // Placeholder return value, should return a list of all items
-
+        return new ArrayList<>(ITEMS); // Placeholder return value, should return a list of all items
     }
 
     @Override
     public long GetNumberOfItems(){
-        return allItems.size(); // Returns the number of items in the repository
+        return ITEMS.size(); // Returns the number of items in the repository
     }
 
     @Override
     public List<Item> GetItemsByCategory(String category){
-        return null; // Placeholder return value, should return a list of items in the specified category
+        List<Item> templist = new ArrayList<>();
+        for(Item itm : ITEMS){
+            if(itm.getCategory() == category){
+                templist.add(itm);
+            }
+        }
+        return templist; // Placeholder return value, should return a list of items in the specified category
     }
-    
 }
