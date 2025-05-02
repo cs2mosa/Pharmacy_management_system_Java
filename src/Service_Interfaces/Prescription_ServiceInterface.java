@@ -39,7 +39,7 @@ abstract interface PrescriptionServiceInterface {
      * @param PatientId The ID of the patient whose prescriptions are to be retrieved.
      * @return A list of Prescription objects for the specified patient.
      */
-    List<Prescription> GetPrescriptionByID(int PatientId);
+    List<Prescription> GetPrescriptionByName(String patientName);
 
     /**
      * Retrieves a list of all prescriptions in the system.
@@ -72,7 +72,7 @@ public class Prescription_ServiceInterface implements PrescriptionServiceInterfa
     }
     
     @Override
-    public List<Prescription> GetPrescriptionByID(int PatientId) {
+    public List<Prescription> GetPrescriptionByName(String patientName) {
         // Implementation for retrieving prescriptions by patient ID
         return null;
     }

@@ -28,11 +28,9 @@ abstract interface OrderRepository {
     /**
      * Updates an existing order in the repository.
      * @param orderId The ID of the order to be updated.
-     * @param query The field or property to be updated.
-     * @param value The new value to be set.
-     * @return The updated order.
+     * @param Neworder The field or property to be updated.
      */
-    Order UpdateOrder(int orderId, String query, Object value); // Updates an order's details.
+    void UpdateOrder(int orderId, Order Neworder); // Updates an order's details.
 
     /**
      * Retrieves a list of orders by the patient's name.
@@ -59,12 +57,11 @@ public class Order_Repository implements OrderRepository{
     private static Order_Repository instance = null;
     
     // Queue to store orders
-    private Queue<Order> ordersQueue;
+    private static Queue<Order> ORDERS;
 
     // Private constructor to prevent instantiation from outside
     private Order_Repository() {
         // Initialize the orders queue here (e.g., using a LinkedList or another implementation)
-        this.ordersQueue = new java.util.LinkedList<>();
     }
 
     // Method to get the singleton instance of Order_Repository
@@ -78,19 +75,19 @@ public class Order_Repository implements OrderRepository{
     @Override
     public void AddOrder(Order order) {
         // Implementation for adding an order to the queue
-        ordersQueue.add(order);
+        ORDERS.add(order);
     }
 
     @Override
     public void DeleteOrder(Order order) {
         // Implementation for deleting an order from the queue
-        ordersQueue.remove(order);
+
     }
 
     @Override
-    public Order UpdateOrder(int orderId, String query, Object value) {
+    public void UpdateOrder(int orderId, Order Neworder) {
         // Implementation for updating an order in the queue
-        return null; // Return null if no matching order is found
+        
     }
 
     @Override

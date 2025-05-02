@@ -5,8 +5,8 @@
  * 
  * This class provides getter and setter methods to access and modify the 
  * attributes of the item.
- * note: class need exeption handling for the setters and getters.
- * 
+ * note:1. class need exeption handling for the setters and getters.
+ *      2. implements builder design for more comprehensive structure. and easier for inistantiaing in main.java
  */
 package Class_model;
 
@@ -56,17 +56,17 @@ public class Item {
      * @param side_effects   The side effects of the item.
      * @param healing_effects The healing effects of the item.
      */
-    public Item(String medic_name, String expire_date, String category, int quantity, String usage, double price, Set<String> side_effects, Set<String> healing_effects) {
-        this.medic_name = medic_name;
-        this.expire_date = expire_date;
-        this.quantity = quantity;
-        this.usage = usage;
-        this.side_effects = side_effects;
-        this.price = price;
-        this.healing_effects = healing_effects;
-        this.category = category;
+    private Item(builder builder) {
+        this.medic_name = builder.medic_name;
+        this.expire_date = builder.expire_date;
+        this.quantity = builder.quantity;
+        this.usage = builder.usage;
+        this.side_effects = builder.side_effects;
+        this.price = builder.price;
+        this.healing_effects = builder.healing_effects;
+        this.category = builder.category;
     }
-
+    
     /**
      * Sets whether the item is refundable.
      *
@@ -218,5 +218,63 @@ public class Item {
      */
     public void setHealingEffects(Set<String> healing_effects) {
         this.healing_effects = healing_effects;
+    }
+
+    /**
+     * builder class
+     */
+    public static class builder{
+        //data fields.
+        private int quantity;
+        private double price;
+        private String category;
+        private String medic_name;
+        private String expire_date;
+        private String usage;
+        private boolean is_refundable;
+        private Set<String> healing_effects = new HashSet<>();
+        private Set<String> side_effects = new HashSet<>();
+
+        //setters for builder class.
+        public builder set_refundable(boolean refundable) {
+            this.is_refundable = refundable;
+            return this;
+        }
+        public builder is_Refundable( boolean is_Refundable) {
+            this.is_refundable = is_Refundable;
+            return this;
+        }
+        public builder setMedicName(String medic_name) {
+            this.medic_name = medic_name;
+            return this;
+        }
+        public builder setPrice(double price) {
+            this.price = price;
+            return this;
+        }
+        public builder setExpireDate(String expire_date) {
+            this.expire_date = expire_date;
+            return this;
+        }
+        public builder setQuantity(int quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+        public builder setUsage(String usage) {
+            this.usage = usage;
+            return this;
+        }
+        public builder setSideEffects(Set<String> side_effects) {
+            this.side_effects = side_effects;
+            return this;
+        }
+        public builder setHealingEffects(Set<String> healing_effects) {
+            this.healing_effects = healing_effects;
+            return this;
+        }
+
+        public Item build(){
+            return new Item(this);
+        }
     }
 }

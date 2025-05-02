@@ -11,7 +11,7 @@ public abstract class User {
      /**
      * The ID of the user.
      */
-    int UserId;
+    private static int UserId;
     /**
      * The username of the user.
      */
@@ -66,7 +66,7 @@ public abstract class User {
      * 
      * @param ID The new Id.
      */
-    void setID(int ID) {
+    public void setID(int ID) {
         this.UserId = ID;
     }
 
@@ -75,7 +75,7 @@ public abstract class User {
      * 
      * @return The ID.
      */
-    int getID() {
+    public int getID() {
         return UserId;
     }
 
@@ -84,7 +84,7 @@ public abstract class User {
      * 
      * @param Username The new username.
      */
-    void setUsername(String Username) {
+    public void setUsername(String Username) {
         this.Username = Username;
     }
 
@@ -93,7 +93,7 @@ public abstract class User {
      * 
      * @return The username.
      */
-    String getUsername() {
+    public String getUsername() {
         return Username;
     }
 
@@ -102,7 +102,7 @@ public abstract class User {
      * 
      * @param Password The new password.
      */
-    void setPassword(String Password) {
+    public void setPassword(String Password) {
         this.Password = Password;
     }
 
@@ -111,7 +111,7 @@ public abstract class User {
      * 
      * @return The password.
      */
-    String getPassword() {
+    public String getPassword() {
         return Password;
     }
 
@@ -120,7 +120,7 @@ public abstract class User {
      * 
      * @param UserEmail The new email address.
      */
-    void setUserEmail(String UserEmail) {
+    public void setUserEmail(String UserEmail) {
         this.UserEmail = UserEmail;
     }
 
@@ -129,7 +129,7 @@ public abstract class User {
      * 
      * @return The email address.
      */
-    String getUserEmail() {
+    public String getUserEmail() {
         return UserEmail;
     }
 
@@ -138,7 +138,7 @@ public abstract class User {
      * 
      * @param PhoneNumber The new phone number.
      */
-    void setPhoneNumber(String PhoneNumber) {
+    public void setPhoneNumber(String PhoneNumber) {
         this.PhoneNumber = PhoneNumber;
     }
 
@@ -147,7 +147,7 @@ public abstract class User {
      * 
      * @return The phone number.
      */
-    String getPhoneNumber() {
+    public String getPhoneNumber() {
         return PhoneNumber;
     }
 

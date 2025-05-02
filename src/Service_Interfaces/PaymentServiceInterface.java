@@ -9,6 +9,20 @@ import Class_model.*;
 abstract interface PaymentServiceInterface {
 
     /**
+     * Adds a new payment to the repository.
+     * 
+     * @param payment The Payment object to be added.
+     */
+    void AddPayment(int PatientId, Payment payment); 
+
+    /**
+     * Withdraws a payment from the repository using its unique identifier.
+     * 
+     * @param PaymentId The unique identifier of the payment to be withdrawn.
+     */
+    void WithdrawPayment(int PatientId,int PaymentId); 
+    
+    /**
      * Processes a payment based on the provided payment ID.
      *
      * @param PaymentId The unique identifier of the payment to be processed.
@@ -22,4 +36,13 @@ abstract interface PaymentServiceInterface {
      * @return A string representation of the receipt.
      */
     String generateReceipt(int paymentId);
+
+    /**
+     * Updates a specific field of a payment record in the repository.
+     * 
+     * @param PatientId The unique identifier of the patient associated with the payment.
+     * @param query The field to be updated.
+     * @param value The new value to be set for the specified field.
+     */
+    void UpdatePayment(int PatientId, String query, Object value);
 }

@@ -1,5 +1,6 @@
 package Service_Interfaces;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,14 +20,14 @@ abstract interface PaymentRepository {
      * 
      * @param payment The Payment object to be added.
      */
-    void AddPayment(Payment payment); // Method to add a payment
+    void AddPayment(int PatientId, Payment payment); 
 
     /**
      * Withdraws a payment from the repository using its unique identifier.
      * 
      * @param PaymentId The unique identifier of the payment to be withdrawn.
      */
-    void WithdrawPayment(int PaymentId); // Method to withdraw a payment by ID
+    void DeletePayment(int PatientId, int PaymentId); 
 
     /**
      * Updates a specific field of a payment record in the repository.
@@ -35,7 +36,7 @@ abstract interface PaymentRepository {
      * @param query The field to be updated.
      * @param value The new value to be set for the specified field.
      */
-    void UpdatePayment(int PatientId, String query, Object value); // Method to update payment details
+    void UpdatePayment(int PatientId, Payment Newpayment); 
 
     /**
      * Retrieves a payment from the repository by its unique identifier.
@@ -43,14 +44,14 @@ abstract interface PaymentRepository {
      * @param PaymentId The unique identifier of the payment to be retrieved.
      * @return The Payment object corresponding to the given PaymentId.
      */
-    Payment GetById(int PaymentId); // Method to get a payment by ID
+    List<Payment> GetById(int PatientId); 
 }
 
 public class Payment_Repository implements PaymentRepository {
     // Singleton instance of Payment_Repository
     private static Payment_Repository instance = null;
     // Map to store payments:-> Integer : UserId.
-    private Map<Integer,List<Payment>> payments = new HashMap<>(); // Using Set for better search complexity
+    private static Map<Integer,List<Payment>> PAYMENTS = new HashMap<>(); // Using Set for better search complexity
 
     // Private constructor to prevent instantiation from outside
     private Payment_Repository() {
@@ -69,20 +70,43 @@ public class Payment_Repository implements PaymentRepository {
     }
 
     @Override
-    public void AddPayment(Payment payment) {
+    public void AddPayment(int PatientId, Payment payment) {
         // Implementation to add a payment
+        List<Payment> payments = new ArrayList<>();
+        if(!PAYMENTS.containsKey(PatientId)){
+            payments = PAYMENTS.get(PatientId);
+            PAYMENTS.remove(PatientId);
+        }
+        payments.add(payment);
+        PAYMENTS.put(PatientId, payments);
     }
+
     @Override
-    public void WithdrawPayment(int PaymentId) {
+    public void DeletePayment(int PatientId, int PaymentId) {
         // Implementation to withdraw a payment by ID
+        if(PAYMENTS.containsKey(PatientId)){
+            List<Payment> payments =  PAYMENTS.get(PatientId);
+            for(Payment pay : payments){
+                if(pay.getID() == PaymentId){
+                    payments.remove(pay);
+                    break;
+                }
+            }
+            PAYMENTS.remove(PatientId);
+            PAYMENTS.put(PatientId, payments);
+        }
     }
+
     @Override
-    public void UpdatePayment(int PatientId, String query, Object value) {
+    public void UpdatePayment(int PatientId, Payment Newpayment) {
         // Implementation to update payment details
+        DeletePayment(PatientId, Newpayment.getID());
+        AddPayment(PatientId, Newpayment);
     }
+
     @Override
-    public Payment GetById(int PaymentId) {
+    public List<Payment> GetById(int PatientId) {
         // Implementation to get a payment by ID
-        return null; // Placeholder return statement
+        return PAYMENTS.get(PatientId); // Placeholder return statement
     }
 }

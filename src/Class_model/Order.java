@@ -42,13 +42,13 @@ public class Order {
      * @param orderItems List of items in the order.
      * @param totalPrice Total price of the order.
      */
-    public Order(int orderId, String orderDate, Casher checkedBy, List<Item> orderItems, double totalPrice) {
-        this.orderId = orderId;
-        this.orderDate = orderDate;
-        this.checkedBy = checkedBy;
-        this.orderItems = orderItems;
-        this.totalPrice = totalPrice;
-        this.status = "Pending";
+    private Order(builder builder) {
+        this.orderId = builder.orderId;
+        this.orderDate = builder.orderDate;
+        this.checkedBy = builder.checkedBy;
+        this.orderItems = builder.orderItems;
+        this.totalPrice = builder.totalPrice;
+        this.status = builder.status;
     }
 
     /** @return The unique identifier of the order. */
@@ -168,5 +168,47 @@ public class Order {
      */
     public void cancelOrder() {
         status = "Cancelled";
+    }
+
+    /**
+     * builder class
+     */
+    public static class builder{
+        //data fields
+        private int orderId;
+        private String orderDate;
+        private Casher checkedBy;
+        private double totalPrice;
+        private String status = "Pending"; //default value.
+        private List<Item> orderItems = new ArrayList<>();
+
+        //setters
+        public builder setOrderId(int orderId) {
+            this.orderId = orderId;
+            return this;
+        }
+        public builder setOrderDate(String orderDate) {
+            this.orderDate = orderDate;
+            return this;
+        }
+        public builder setCheckedBy(Casher checkedBy) {
+            this.checkedBy = checkedBy;
+            return this;
+        }
+        public builder setOrderItems(List<Item> orderItems) {
+            this.orderItems = orderItems;
+            return this;
+        }
+        public builder setTotalPrice(double totalPrice) {
+            this.totalPrice = totalPrice;
+            return this;
+        }
+        public builder setStatus(String status) {
+            this.status = status;
+            return this;
+        }
+        public Order build(){
+            return new Order(this);
+        }
     }
 }

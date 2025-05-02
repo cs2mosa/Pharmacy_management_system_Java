@@ -1,5 +1,6 @@
 package Service_Interfaces;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,7 +31,7 @@ abstract interface PatientRepository {
      * @param query The name of the attribute to be updated.
      * @param value The new value to set for the specified attribute.
      */
-    void UpdatePatient(int PatientID, String query, Object value);
+    void UpdatePatient(int PatientID, Patient Newpatient);
 
     /**
      * Retrieves a patient from the repository based on their unique ID.
@@ -49,7 +50,7 @@ public class Patient_Repository implements PatientRepository {
     // Singleton instance of Patient_Repository
     private static Patient_Repository instance = null;
     // Set to store patients
-    private Set<Patient> patients = new HashSet<>(); // Using Set for better search complexity
+    private Set<Patient> PATIENTS = new HashSet<>(); // Using Set for better search complexity
 
     // Private constructor to prevent instantiation from outside
     private Patient_Repository() {
@@ -66,26 +67,37 @@ public class Patient_Repository implements PatientRepository {
 
     @Override
     public void AddPatient(Patient patient) {
-        patients.add(patient);
+        if(!PATIENTS.contains(patient))
+            PATIENTS.add(patient);
     }
 
     @Override
     public void RemovePatient(int PatientID) {
-        
+        if(PATIENTS.contains(GetPatient(PatientID)) && GetPatient(PatientID) != null){
+            PATIENTS.remove(GetPatient(PatientID));
+        }
     }
+
     @Override
-    public void UpdatePatient(int PatientID, String query, Object value) {
-        
+    public void UpdatePatient(int PatientID, Patient Newpatient) {
+        RemovePatient(PatientID);
+        AddPatient(Newpatient);
     }
+
     @Override
     public Patient GetPatient(int PatientID) {
         //implementation for getting a patient by ID
+        for(Patient p : PATIENTS){
+            if(p.getID() == PatientID){
+                return p;
+            }
+        }
         return null; // Return null if not found
     }
     @Override
     public List<Patient> GetAllPatients() {
-        // Convert the Set to a List and return it
-        return null;
+        // Convert the Set to a List and return it.
+        return new ArrayList<>(PATIENTS);
     }
     
 }
