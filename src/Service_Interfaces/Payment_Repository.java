@@ -11,6 +11,7 @@ import Class_model.*;
 /**
  * PaymentRepository is an abstract interface that defines the contract for managing payment operations.
  * It provides methods to add, withdraw, update, and retrieve payment details.
+ * NOTE : Payment Id should be the same as Order Id.
  */
 abstract interface PaymentRepository {
 

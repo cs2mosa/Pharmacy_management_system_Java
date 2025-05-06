@@ -5,8 +5,9 @@ import Class_model.*;
 /**
  * The PaymentServiceInterface defines the contract for payment processing services.
  * It includes methods for processing payments and generating receipts.
- * NOTE: Cancelled payments are not removed from the repository, but their status is updated, and their ID is set to -1. 
- * withdrawal is differnt from deletion in Payment_Repository.
+ * NOTE : Cancelled payments are not removed from the repository, but their status is updated, and their ID is set to -1. 
+ *       withdrawal is differnt from deletion in Payment_Repository.
+ * NOTE : Payment Id should be the same as Order Id.
  */
 abstract interface PaymentServiceInterface {
 
