@@ -30,8 +30,9 @@ abstract interface PatientServiceInterface {
     /**
      * Removes a patient from the system by their name.
      * @param Patientname The name of the patient to be removed.
+     * @return status code of 0 on success , and -1 else.
      */
-    void RemovePatient(String Patientname);
+    int RemovePatient(String Patientname);
 
     /**
      * Authenticate, then Update a specific attribute of a patient, can change Password too.
@@ -39,7 +40,7 @@ abstract interface PatientServiceInterface {
      * @param query The attribute to be updated.
      * @param value The new value for the specified attribute.
      * @param Password The password of the patient to be updated.
-     * @return status code of 0 on success , and -1 else.
+     * @return status code of patient id on success , and -1 else.
      */
     int UpdatePatient(String PatientName,String Password, String query, Object value);
 
@@ -120,9 +121,9 @@ public class Patient_Service implements PatientServiceInterface {
     }
 
     @Override
-    public void RemovePatient(String Patientname) {
+    public int RemovePatient(String Patientname) {
         // Implementation for removing a patient
-        Patient_Repository.getInstance().RemovePatient(GetPatient(Patientname).getID());
+        return Patient_Repository.getInstance().RemovePatient(GetPatient(Patientname).getID());
     }
 
     @Override
@@ -160,10 +161,7 @@ public class Patient_Service implements PatientServiceInterface {
     public int UpdatePatient(String PatientName,String Password, String query, Object value) {
         // Implementation for updating a patient
         Patient temp =  GetPatient(PatientName);
-        if(temp == null){
-            return -1;
-        }
-        if(!AuthenticatePatient(PatientName, Password)){
+        if(temp == null || query == null || value == null || query.isEmpty() || value.toString().isEmpty() || !AuthenticatePatient(PatientName, Password)){ 
             return -1;
         }
         switch (query) {
@@ -172,11 +170,13 @@ public class Patient_Service implements PatientServiceInterface {
                     temp.setAge((Float)value);
                 }
                 break;
+                
             case "address":
                 if(value instanceof String){
                     temp.setAddress((String)value);
                 }
                 break;
+
             case "PatientBalance":
                 if(value instanceof Double){
                     temp.SetBalance((Double)value);
@@ -185,15 +185,27 @@ public class Patient_Service implements PatientServiceInterface {
 
             case "Password":
                 if(value instanceof String){
-                    temp.setPassword(query);
+                    temp.setPassword((String)value);
                 }
                 break;
             
+            case "email":
+                if(value instanceof String){
+                    temp.setUserEmail((String)value);
+                }
+                break;
+
+            case "active":
+                if(value instanceof Boolean){
+                    temp.setactive((Boolean)value);
+                }
+                break;
+
             default:
                 return -1;
         }
         Patient_Repository.getInstance().UpdatePatient(temp.getID(), temp);
-        return 0;
+        return temp.getID();
     }
 
     @Override
@@ -225,6 +237,13 @@ public class Patient_Service implements PatientServiceInterface {
     public int PlaceOrder(Map<String, Integer> items, int PatientId, Pharmacist pharmacist){
         Iterator <Map.Entry<String,Integer>> it = items.entrySet().iterator();
         List<Item> tempitems = new ArrayList<>();
+        Patient tempel = Patient_Repository.getInstance().GetPatient(PatientId);
+        if(tempel == null)
+            return -1;
+        if(pharmacist == null)
+            return -1;
+        if(items == null || items.isEmpty())
+            return -1;
         while(it.hasNext()){
             Map.Entry<String,Integer> temp = it.next();
             Item tempitem = Inventory_service.getInstance().GetItemByName(temp.getKey());
@@ -232,8 +251,11 @@ public class Patient_Service implements PatientServiceInterface {
                 return -1;
             if(tempitem.getQuantity() < temp.getValue())
                 return -1;
-            if(pharmacist.is_safe(tempitem, Patient_Repository.getInstance().GetPatient(PatientId)))
-                tempitems.add(tempitem);
+            if(pharmacist.is_safe(tempitem, tempel) == false)
+                return -1;
+
+            tempitems.add(tempitem);
+            Inventory_service.getInstance().updateStock(tempitem.getMedicName(), tempitem.getQuantity() - temp.getValue());
         }
         Order order =new Order.builder()
                               .setOrderId(new Random().nextInt(50000))
@@ -241,10 +263,11 @@ public class Patient_Service implements PatientServiceInterface {
                               .setOrderItems(tempitems)
                               .build();
 
-        if(Order_Repository.getInstance().AddOrder(PatientId, order) > 0){
-            Patient_Repository.getInstance().GetPatient(PatientId).Add_order(order);
-            Prescription_Service.getInstance().IssuePrescription(pharmacist,PatientId,new Random().nextInt(50000));
+        if(Order_Repository.getInstance().AddOrder(PatientId, order) > 0  && Prescription_Service.getInstance().IssuePrescription(pharmacist,PatientId,order.getOrderId()) > 0){
+            tempel.Add_order(order);
+            return order.getOrderId();
+        }else{
+            return -1;
         }
-        return order.getOrderId();
     }
 }

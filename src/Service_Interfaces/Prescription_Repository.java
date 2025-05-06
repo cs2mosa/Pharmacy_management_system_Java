@@ -16,7 +16,8 @@ abstract interface PrescriptionRepository {
     /**
      * Adds a new prescription to the repository.
      * @param prescription The Prescription object to be added.
-     * @return prescription id on success.
+     * @param userId The ID of the user associated with the prescription.
+     * @return prescription id on success. -1 else.
      */
     int Add(int userId, Prescription prescription);    
 
@@ -30,24 +31,24 @@ abstract interface PrescriptionRepository {
     /**
      * Finds and retrieves a list of prescriptions associated with a specific patient's name.
      * @param patientName The name of the patient whose prescriptions are to be retrieved.
-     * @return A list of prescriptions matching the given patient name.
+     * @return A list of prescriptions matching the given patient name. or null if not found.
      */
     List<Prescription> findByPatientID(int patientId);
 
     /**
      * Retrieves all prescriptions from the repository.
-     * @return A list of all prescriptions.
+     * @return A list of all prescriptions. or null if not found.
      */
     List<Prescription> findAll();
 
     /**
      * Retrieves a prescription by its unique ID.
-     * @param preID
-     * @return
+     * @param preID The unique identifier of the prescription to be retrieved.
+     * @return The Prescription object corresponding to the given ID, or null if not found.
      */
     public Prescription getPreById(int preID);
 }
-public class Prescription_Repository implements PrescriptionRepository {
+class Prescription_Repository implements PrescriptionRepository {
     
     //Map to store payments:-> Integer : UserId.
     private static Map<Integer, List<Prescription>> PRESCRIPTIONS;
@@ -73,7 +74,10 @@ public class Prescription_Repository implements PrescriptionRepository {
     public int Add(int userId, Prescription prescription) {
         // Implementation for adding a prescription
         List<Prescription> temp = PRESCRIPTIONS.get(userId);
-        if(temp == null){
+        if (temp == null || prescription == null || Patient_Repository.getInstance().GetPatient(userId) == null) {
+            return -1; // Invalid prescription
+        }
+        if(temp.isEmpty()){
             temp = new ArrayList<>();
             temp.add(prescription);
             PRESCRIPTIONS.put(userId,temp);
@@ -87,13 +91,16 @@ public class Prescription_Repository implements PrescriptionRepository {
     public int Delete(int userId, int ID) {
         // Implementation for deleting a prescription
         List<Prescription> prescriptions = PRESCRIPTIONS.get(userId);
+        if (prescriptions == null || prescriptions.isEmpty()) {
+            return -1; // No prescriptions found for the user
+        }
         for(Prescription prescription : prescriptions){
             if(prescription.getId() == ID){
                 prescriptions.remove(prescription);
                 return 0;
             }
         }
-        return -1;
+        return -1; // Prescription not found
     }
 
     @Override

@@ -15,20 +15,22 @@ abstract interface PatientRepository {
     /**
      * Adds a new patient to the repository.
      * @param patient The Patient object to be added.
+     * @return The unique ID of the added patient, or -1 if the addition failed.
      */
     int AddPatient(Patient patient);
 
     /**
      * Removes a patient from the repository based on their unique ID.
      * @param PatientID The unique identifier of the patient to be removed.
+     * @return The status of the removal operation. -1 if failed, 0 if successful.
      */
-    void RemovePatient(int PatientID);
+    int RemovePatient(int PatientID);
 
     /**
      * Updates a specific attribute of a patient in the repository.
      * @param PatientID The unique identifier of the patient to be updated.
      * @param Newpatient The patient to update.
-     * @return The status of the update operation. -1 if failed, 0 if successful.
+     * @return The status of the update operation. -1 if failed, patient id if successful.
      */
     int UpdatePatient(int PatientID, Patient Newpatient);
 
@@ -46,7 +48,7 @@ abstract interface PatientRepository {
     Set<Patient> GetAllPatients();
 }
 
-public class Patient_Repository implements PatientRepository {
+class Patient_Repository implements PatientRepository {
     // Singleton instance of Patient_Repository
     private static Patient_Repository instance = null;
     // Set to store patients
@@ -67,7 +69,7 @@ public class Patient_Repository implements PatientRepository {
 
     @Override
     public int AddPatient(Patient patient) {
-        if(!PATIENTS.contains(patient)){
+        if(!PATIENTS.contains(patient) && patient != null){
             PATIENTS.add(patient);
             patient.setID(new Random().nextInt(50000)); // Set the ID to the size of the set
             return patient.getID();
@@ -77,15 +79,19 @@ public class Patient_Repository implements PatientRepository {
     }
 
     @Override
-    public void RemovePatient(int PatientID) {
+    public int RemovePatient(int PatientID) {
         if(PATIENTS.contains(GetPatient(PatientID)) && GetPatient(PatientID) != null){
             PATIENTS.remove(GetPatient(PatientID));
+            return 0; // Return 0 if successful
+        }else{
+            return -1; // Return -1 if the patient was not found
         }
     }
 
     @Override
     public int UpdatePatient(int PatientID, Patient Newpatient) {
-        RemovePatient(PatientID);
+        if(RemovePatient(PatientID) == -1) 
+            return -1; // Return -1 if the patient was not found
         return AddPatient(Newpatient);
     }
 

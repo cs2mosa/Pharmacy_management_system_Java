@@ -19,7 +19,7 @@ abstract interface PaymentServiceInterface {
     int AddPayment(int PatientId, Payment payment, int OrderId); 
 
     /**
-     * Withdraws a payment from the repository using its unique identifier.
+     * Withdraws a payment from the repository using its unique identifier. marks the payment with id of -1.
      * @param PatientId The unique identifier of the patient associated with the payment.
      * @param PaymentId The unique identifier of the payment to be withdrawn.
      * @return The status of the withdrawal operation. -1 if failed, 0 if successful.
@@ -47,7 +47,7 @@ abstract interface PaymentServiceInterface {
      * @param PatientId The unique identifier of the patient associated with the payment.
      * @param query The field to be updated.
      * @param value The new value to be set for the specified field, only 3 queries are supported for now -> "amount" , "payday", "paymethod".
-     * @return status code of 0 on success , and -1 else.
+     * @return status code of payment id on success , and -1 else.
      */
     int UpdatePayment(int PatientId, String query, Object value);
 }
@@ -73,6 +73,8 @@ public class Payment_service implements PaymentServiceInterface{
     @Override
     public int AddPayment(int PatientId, Payment payment, int OrderId) {
         // Implementation for adding a payment
+        if(payment == null || Order_Service.getInstance().GetById(OrderId) == null || Patient_Repository.getInstance().GetPatient(PatientId) == null)
+            return -1; //failed
         payment.setID(OrderId);
         payment.setStatus("Pending");
         payment.setOrder(Order_Repository.getInstance().GetById(OrderId));
@@ -87,6 +89,8 @@ public class Payment_service implements PaymentServiceInterface{
     public int WithdrawPayment(int PatientId, int PaymentId) {
         // Implementation for withdrawing a payment
         Payment temp = Payment_Repository.GetInstance().GetPayment(PaymentId);
+        if(temp == null || Patient_Repository.getInstance().GetPatient(PatientId) == null) 
+            return -1;
         for(Item itm : temp.getOrder().getOrderItems()){
             if (!itm.is_Refundable()){
                 return -1; // Item is not refundable
@@ -131,8 +135,7 @@ public class Payment_service implements PaymentServiceInterface{
             default:
                 return -1;
         }
-        Payment_Repository.GetInstance().UpdatePayment(PatientId, payment);
-        return 0;
+        return Payment_Repository.GetInstance().UpdatePayment(PatientId, payment);
     }
 
     //order id is the payment id

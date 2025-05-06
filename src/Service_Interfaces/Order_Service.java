@@ -13,10 +13,11 @@ abstract interface OrderServiceInterface {
 
     /**
      * Deletes an order by its ID.
-     * 
+     * @param patientId The ID of the patient associated with the order.
      * @param orderId The ID of the order to be deleted.
+     * @return 0 on success, -1 if order not found.
      */
-    void DeleteOrder(int patientId,int orderId); // can be void
+    int DeleteOrder(int patientId,int orderId); // can be void
 
     /**
      * Updates the items of an existing order.
@@ -24,8 +25,9 @@ abstract interface OrderServiceInterface {
      * @param orderId The ID of the order to be updated.
      * @param query A boolean flag where true represents adding an item and false represents removing an item.
      * @param item The item to be added or removed.
+     * @return order id on success, -1 if order or item not found.
      */
-    void UpdateOrderItems(int orderId, boolean query, Item item); // query(0) represents adding, query(1) represents removing
+    int UpdateOrderItems(int orderId, boolean query, Item item); // query(0) represents adding, query(1) represents removing
 
     /**
      * Retrieves an order by its ID.
@@ -56,9 +58,11 @@ abstract interface OrderServiceInterface {
      * @param orderId The ID of the order containing the item to be returned.
      * @param itemName The Name of the item to be returned.
      * @param reason The reason for the return.
+     * @return order id on success, -1 if order or item not found.
      */
-    void HandleReturn(int orderId, String ItemName, String reason);
+    int HandleReturn(int orderId, String ItemName);
 }
+
 public class Order_Service implements OrderServiceInterface {
 
     /**
@@ -79,18 +83,24 @@ public class Order_Service implements OrderServiceInterface {
 
 
     @Override
-    public void DeleteOrder(int patientId,int orderId){
+    public int DeleteOrder(int patientId,int orderId){
         // Implementation for deleting an order
-        Order_Repository.getInstance().DeleteOrder(patientId, orderId);
+        return Order_Repository.getInstance().DeleteOrder(patientId, orderId);
     }
 
     @Override
-    public void UpdateOrderItems(int orderId, boolean query, Item item) {
+    public int UpdateOrderItems(int orderId, boolean query, Item item) {
         // Implementation for updating order items
+        if(Order_Repository.getInstance().GetById(orderId) == null) 
+            return -1; // Order not found
+        if(item == null) 
+            return -1; // Item not found
         if(query){
             GetById(orderId).addItem(item);
+            return orderId; // 0 for adding
         }else{
             GetById(orderId).removeItem(item);
+            return orderId; // 1 for removing
         }
     }
 
@@ -121,7 +131,21 @@ public class Order_Service implements OrderServiceInterface {
     }
 
     @Override
-    public void HandleReturn(int orderId, String ItemName, String reason){
-
+    public int HandleReturn(int orderId, String ItemName){
+        // Implementation for handling item returns
+        Order order = Order_Repository.getInstance().GetById(orderId);
+        if(order != null && Inventory_service.getInstance().GetItemByName(ItemName) != null){
+            for(Item item : order.getOrderItems()){
+                if(item.getMedicName() == ItemName){
+                    order.removeItem(item);
+                    break;
+                }
+            }
+            order.setStatus("Returned");
+            order.setTotalPrice(order.getTotalPrice() - Inventory_service.getInstance().GetItemByName(ItemName).getPrice());
+            return orderId; // success
+        }else{
+            return -1;
+        }
     }
 }

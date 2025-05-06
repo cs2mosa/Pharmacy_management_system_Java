@@ -24,14 +24,17 @@ abstract interface OrderRepository {
 
     /**
      * Deletes an existing order from the repository.
-     * @param order The order to be deleted.
+     * @param orderId The ID of the order to be deleted.
+     * @param patientId The ID of the patient associated with the order.
+     * @return 0 on success, -1 if order not found.
      */
-    void DeleteOrder(int patientId,int orderId); // Removes an order from the repository.
+    int DeleteOrder(int patientId,int orderId); // Removes an order from the repository.
 
     /**
      * Updates an existing order in the repository.
      * @param orderId The ID of the order to be updated.
      * @param Neworder The field or property to be updated.
+     * @return 0 on success, -1 if order not found.
      */
     int UpdateOrder(int orderId, Order Neworder); // Updates an order's details.
 
@@ -45,7 +48,7 @@ abstract interface OrderRepository {
     /**
      * Retrieves an order by its unique ID.
      * @param orderId The ID of the order to retrieve.
-     * @return The order with the specified ID.
+     * @return The order with the specified ID or null if not found.
      */
     Order GetById(int orderId); // Fetches an order by its ID.
 
@@ -55,7 +58,7 @@ abstract interface OrderRepository {
      */
     List<Order> GetHistory(); // Retrieves the order history.
 }
-public class Order_Repository implements OrderRepository{
+class Order_Repository implements OrderRepository{
     // Singleton instance of Order_Repository
     private static Order_Repository instance = null;
     
@@ -79,6 +82,7 @@ public class Order_Repository implements OrderRepository{
     @Override
     public int AddOrder(int patientId, Order order) {
         // Implementation for adding an order to the queue
+        if(ORDERS.get(patientId) == null || order == null) return -1; // Patient not found or order is null
         List<Order> orders = ORDERS.get(patientId);
         for(Order o : orders){
             if(o.getOrderId() == order.getOrderId()){
@@ -92,18 +96,23 @@ public class Order_Repository implements OrderRepository{
     }
 
     @Override
-    public void DeleteOrder(int patientId,int orderId) {
+    public int DeleteOrder(int patientId,int orderId) {
         // Implementation for deleting an order from the Map
         List<Order> orders = ORDERS.get(patientId);
-        if (orders != null) {
+        if (!orders.isEmpty()) {
             orders.removeIf(order -> order.getOrderId() == orderId);
+            return 0;
+        }else{
+            return -1;
         }
     }
 
     @Override
     public int UpdateOrder(int patientId, Order Neworder) {
         // Implementation for updating an order in the Map
-        DeleteOrder( patientId,Neworder.getOrderId());
+        if(DeleteOrder( patientId,Neworder.getOrderId()) == -1){
+            return -1; // Order not found
+        } 
         return  AddOrder(patientId, Neworder);
     }
 

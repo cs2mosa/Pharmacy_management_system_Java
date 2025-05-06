@@ -63,7 +63,7 @@ abstract interface ItemsRepository {
     List<Item> GetItemsByCategory(String category);
 }
 
-public class Items_Repository implements ItemsRepository{
+class Items_Repository implements ItemsRepository{
 
     // Singleton instance of Items_Repository
     private static Items_Repository instance = null;

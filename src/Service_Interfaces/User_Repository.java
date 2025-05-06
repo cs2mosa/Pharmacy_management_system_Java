@@ -1,6 +1,7 @@
 package Service_Interfaces;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import Class_model.User;
@@ -14,20 +15,23 @@ abstract interface UserRepository {
     /**
      * Adds a new user to the repository.
      * @param user The User object to be added.
+     * @return The unique identifier of the newly added user. -1 if the user already exists.
      */
     int Add(User user);
 
     /**
      * Updates an existing user in the repository.
      * @param user The User object with updated information.
+     * @return The unique identifier of the updated user. -1 if the user does not exist.
      */
     int Update(User user);
 
     /**
      * Deletes a user from the repository.
      * @param user The User object to be removed.
+     * @return 0 if the user was successfully deleted, -1 if the user does not exist.
      */
-    void Delete(int UserId);
+    int Delete(int UserId);
 
     /**
      * Retrieves a user by their username.
@@ -44,7 +48,7 @@ abstract interface UserRepository {
     User GetByID(int ID);
 }
 
-public class User_Repository implements UserRepository {
+class User_Repository implements UserRepository {
 
     private static User_Repository instance = null;
     private static Set<User> USERS; // Using Set for better search complexity
@@ -67,6 +71,7 @@ public class User_Repository implements UserRepository {
     public int Add(User user) {
         // Implementation to add a user
         if(!USERS.contains(user) && user != null) {
+            user.setID(new Random().nextInt(50000));
             USERS.add(user);    
             return user.getID();
         }else{
@@ -75,21 +80,22 @@ public class User_Repository implements UserRepository {
     }
 
     @Override
-    public void Delete(int UserId) {
+    public int Delete(int UserId) {
         // Implementation to delete a user
         User user_indata = GetByID(UserId);
-        if(user_indata == null) {
-            return; // User not found, cannot delete
+        if(user_indata == null || USERS.contains(user_indata) == false) {
+            return -1; // User not found, cannot delete
         }
-        if(USERS.contains(user_indata)){
-            USERS.remove(user_indata);
-        }
+        USERS.remove(user_indata);
+        return 0;
     }
 
     @Override
     public int Update(User Newuser) {
         // Implementation to update a user
-        Delete(Newuser.getID());
+        if(Delete(Newuser.getID()) == -1) {
+            return -1; // User not found, cannot update
+        }
         return Add(Newuser);
     }
 

@@ -20,15 +20,17 @@ abstract interface InventoryServiceInterface {
     /**
      * Removes an item from the inventory by its name.
      * @param Itemname The name of the item to be removed.
+     * @return 0 if the item is removed successfully, -1 if the item does not exist.
      */
-    void RemoveItemByName(String Itemname);
+    int RemoveItemByName(String Itemname);
 
     /**
      * Updates the details of an existing item in the inventory.
      * @param item The item with updated details.
-     * @param value The new price of the item.
+     * @param value The new price of the item.(Positive only)
+     * @return 0 if the item is updated successfully, -1 if the item does not exist.
      */
-    void UpdateItemPrice(String itemName, int value);
+    int UpdateItemPrice(String itemName, int value);
 
     /**
      * Retrieves an item from the inventory by its name.
@@ -40,16 +42,17 @@ abstract interface InventoryServiceInterface {
     /**
      * Retrieves a list of items belonging to a specific category.
      * @param category The category of items to retrieve.
-     * @return A list of items in the specified category.
+     * @return A list of items in the specified category.or null if not found.
      */
     List<Item> GetItemsByCategory(String category);
 
     /**
      * Updates the stock quantity of a specific item.
      * @param item The name of the item to update.
-     * @param quantityChange The change in quantity (positive or negative).
+     * @param quantityChange The change in quantity (positive only).
+     * @return 0 if the stock is updated successfully, -1 if the item does not exist.
      */
-    void updateStock(String item, int quantityChange);
+    int updateStock(String item, int quantityChange);
 
     /**
      * Retrieves a list of items that are low in stock.
@@ -91,16 +94,23 @@ public class Inventory_service implements InventoryServiceInterface{
     }
 
     @Override
-    public void RemoveItemByName(String Itemname){
+    public int RemoveItemByName(String Itemname){
         if(Items_Repository.GetInstance().GetItemByName(Itemname) != null){
             Items_Repository.GetInstance().RemoveItemByName(Itemname);
             //other functionalites to be added.
+            return 0;
+        }else{
+            return -1; // Item not found.
         }
     }
 
     @Override
-    public void UpdateItemPrice(String itemName, int value){
-        Items_Repository.GetInstance().GetItemByName(itemName).setPrice(value);
+    public int UpdateItemPrice(String itemName, int value){
+        if(Items_Repository.GetInstance().GetItemByName(itemName)!= null){
+            Items_Repository.GetInstance().GetItemByName(itemName).setPrice(value);
+            return 0;
+        }
+        return -1; // Item not found.
     }
 
     @Override
@@ -116,21 +126,30 @@ public class Inventory_service implements InventoryServiceInterface{
     }
 
     @Override
-    public void updateStock(String item, int quantityChange){
+    public int updateStock(String item, int quantity){
         //other functionalities to be added here.
-        Items_Repository.GetInstance().GetItemByName(item).setQuantity(quantityChange);
+        if(Items_Repository.GetInstance().GetItemByName(item) !=null && quantity > 0){
+            Items_Repository.GetInstance().GetItemByName(item).setQuantity(quantity);
+            return 0;
+        }else{
+            return -1;
+        }
     }    
 
     @Override
     public List<String> getLowStockItems(){
         List<Item> temp = Items_Repository.GetInstance().GetAllItems();
         List<String> lowstocks = new ArrayList<>();
-        for(Item item : temp){
-            //5 is the bare minimum for an item (for now).
-            if(item.getQuantity() <= 5){
-                lowstocks.add(item.getMedicName());
+        if(!temp.isEmpty()){
+            for(Item item : temp){
+                //5 is the bare minimum for an item (for now).
+                if(item.getQuantity() <= 5){
+                    lowstocks.add(item.getMedicName());
+                }
             }
+            return lowstocks;
+        }else{
+            return null; // No items in the inventory.
         }
-        return lowstocks;
     }
 }

@@ -13,16 +13,18 @@ interface UserServiceInterface {
     /**
      * Adds a new user to the system, For every user except Patients
      * @param user The User object to be added.
+     * @return The unique identifier of the newly added user. -1 if the user already exists.
      */
-    void AddUser(User user);
+    int AddUser(User user);
 
     /**
      * Updates a specific field of a user in the system.
      * @param user The identifier of the user to be updated.
      * @param query The field to be updated.
      * @param value The new value for the specified field.
+     * @return The unique identifier of the updated user.
      */
-    void UpdateUser(String user, String query, Object value);
+    int UpdateUser(String user, String query, Object value);
 
     /**
      * Deletes a user from the system.
@@ -36,34 +38,6 @@ interface UserServiceInterface {
      * @return true if authentication is successful, false otherwise.
      */
     boolean AuthenticateUser(User user);
-
-    /**
-     * Deactivates a user account in the system.
-     * @param user The identifier of the user to be deactivated.
-     */
-    void DeactivateUser(String user);
-
-    /**
-     * Activates a user account in the system.
-     * @param userId The unique identifier of the user to be activated.
-     */
-    void activateUser(int userId);
-
-    /**
-     * Changes the password for a user.
-     * @param user The identifier of the user.
-     * @param oldPassword The current password of the user.
-     * @param NewPassword The new password to be set.
-     * @return true if the password is successfully changed, false otherwise.
-     */
-    boolean ChangePassword(String username, String oldPassword, String NewPassword);
-
-    /**
-     * Checks if a user has access permissions.
-     * @param user The User object to check access for.
-     * @return true if the user has access, false otherwise.
-     */
-    boolean CheckAccess(User user);
 }
 
 public class User_Service implements UserServiceInterface {
@@ -85,45 +59,63 @@ public class User_Service implements UserServiceInterface {
     }
 
     @Override
-    public void AddUser(User user) {
+    public int AddUser(User user) {
         // Implementation for adding a user
+        return User_Repository.GetInstance().Add(user);
     }
 
     @Override
-    public void UpdateUser(String user, String query, Object value) {
+    public int UpdateUser(String user, String query, Object value) {
         // Implementation for updating a user
+        User temp = User_Repository.GetInstance().GetByUsername(user);
+        if(temp == null) return -1;
+        switch (query) {
+            case "username":
+                if(value instanceof String){
+                    temp.setUsername((String)value);
+                }
+                break;
+            case "password":
+                if(value instanceof String){
+                    temp.setPassword((String)value);
+                }
+                break;
+            
+            case "email":
+                if(value instanceof String){
+                    temp.setUserEmail((String)value);
+                }
+                break;
+            case "phone":
+                if(value instanceof String){
+                    temp.setPhoneNumber((String)value);
+                }
+                break;
+            case "activate":
+                if(value instanceof Boolean){
+                    temp.setactive((Boolean)value);
+                }
+                break;
+            default:
+                return -1;
+        }
+        return temp.getID();
     }
 
     @Override
     public void DeleteUser(String user) {
         // Implementation for deleting a user
+        User_Repository.GetInstance().Delete(User_Repository.GetInstance().GetByUsername(user).getID());
     }
 
     @Override
     public boolean AuthenticateUser(User user) {
         // Implementation for authenticating a user
-        return false;
-    }
-
-    @Override
-    public void DeactivateUser(String user) {
-        // Implementation for deactivating a user
-    }
-    
-    @Override
-    public void activateUser(int userId) {
-        // Implementation for activating a user
-    }
-
-    @Override
-    public boolean ChangePassword(String username, String oldPassword, String NewPassword) {
-        // Implementation for changing a user's password
-        return false;
-    }
-
-    @Override
-    public boolean CheckAccess(User user) {
-        // Implementation for checking user access permissions
-        return false;
+        User temp = User_Repository.GetInstance().GetByUsername(user.getUsername());
+        if(temp == null || !temp.getPassword().equals(user.getPassword())){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

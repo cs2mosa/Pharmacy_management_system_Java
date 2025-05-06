@@ -215,8 +215,8 @@ public abstract class User {
     /**
      * Deactivates the user.
      */
-    public void Deactivate() {
-        this.isActive = false;
+    public void setactive(boolean active) {
+        this.isActive = active;
     }
 
     /**

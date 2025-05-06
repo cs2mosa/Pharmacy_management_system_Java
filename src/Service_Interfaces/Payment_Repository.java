@@ -25,15 +25,16 @@ abstract interface PaymentRepository {
      * Withdraws a payment from the repository using its unique identifier.
      * @param PatientId The unique identifier of the patient associated with the payment.
      * @param PaymentId The unique identifier of the payment to be withdrawn.
+     * @return The status of the withdrawal operation. -1 if failed mostly because patient not found, 0 if successful.
      */
-    void DeletePayment(int PatientId, int PaymentId); 
+    int DeletePayment(int PatientId, int PaymentId); 
 
     /**
      * Updates a specific field of a payment record in the repository.
      * 
      * @param PatientId The unique identifier of the patient associated with the payment.
      * @param Newpayment The new payment to be updated.
-     * @return 
+     * @return status code of payment id on success, and -1 else.
      */
     int UpdatePayment(int PatientId, Payment Newpayment); 
 
@@ -56,12 +57,12 @@ abstract interface PaymentRepository {
      * Retrieves a payment from the repository by its unique identifier.
      * 
      * @param PaymentId The unique identifier of the payment to be retrieved.
-     * @return The Payment object corresponding to the given PaymentId.
+     * @return The Payment object corresponding to the given PaymentId. null if not found.
      */
     Payment GetPayment(int PaymentId); 
 }
 
-public class Payment_Repository implements PaymentRepository {
+class Payment_Repository implements PaymentRepository {
     // Singleton instance of Payment_Repository
     private static Payment_Repository instance = null;
     // Map to store payments:-> Integer : UserId.
@@ -88,7 +89,7 @@ public class Payment_Repository implements PaymentRepository {
     public int AddPayment(int PatientId, Payment payment) {
         // Implementation to add a payment
         // Check if the payment already exists in the repository
-
+        if (payment == null) return -1;
         if(PAYMENTS.containsKey(PatientId)){
             List<Payment> payments = PAYMENTS.get(PatientId);
             for(Payment p : payments){
@@ -109,11 +110,15 @@ public class Payment_Repository implements PaymentRepository {
     }
 
     @Override
-    public void DeletePayment(int PatientId, int PaymentId) {
+    public int DeletePayment(int PatientId, int PaymentId) {
         // Implementation to withdraw a payment by ID
         if(PAYMENTS.containsKey(PatientId)){
             List<Payment> payments =  PAYMENTS.get(PatientId);
             payments.removeIf(payment -> payment.getID() == PaymentId);
+            return 0;
+        }
+        else{
+            return -1; // Payment not found, return -1
         }
     }
 
