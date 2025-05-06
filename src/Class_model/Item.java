@@ -65,6 +65,7 @@ public class Item {
         this.price = builder.price;
         this.healing_effects = builder.healing_effects;
         this.category = builder.category;
+        this.is_refundable = builder.is_refundable;
     }
     
     /**
@@ -236,11 +237,7 @@ public class Item {
         private Set<String> side_effects = new HashSet<>();
 
         //setters for builder class.
-        public builder set_refundable(boolean refundable) {
-            this.is_refundable = refundable;
-            return this;
-        }
-        public builder is_Refundable( boolean is_Refundable) {
+        public builder set_Refundable( boolean is_Refundable) {
             this.is_refundable = is_Refundable;
             return this;
         }

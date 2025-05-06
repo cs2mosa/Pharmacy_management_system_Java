@@ -2,7 +2,6 @@ package Service_Interfaces;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import Class_model.User;
 
@@ -16,13 +15,13 @@ abstract interface UserRepository {
      * Adds a new user to the repository.
      * @param user The User object to be added.
      */
-    void Add(User user);
+    int Add(User user);
 
     /**
      * Updates an existing user in the repository.
      * @param user The User object with updated information.
      */
-    void Update(User user);
+    int Update(User user);
 
     /**
      * Deletes a user from the repository.
@@ -48,10 +47,11 @@ abstract interface UserRepository {
 public class User_Repository implements UserRepository {
 
     private static User_Repository instance = null;
-    private static Set<User> USERS = new HashSet<>(); // Using Set for better search complexity
+    private static Set<User> USERS; // Using Set for better search complexity
 
     private User_Repository(){
         // Private constructor to prevent instantiation from outside
+        USERS = new HashSet<>();
     }
 
     public static User_Repository GetInstance(){
@@ -64,12 +64,13 @@ public class User_Repository implements UserRepository {
     }
 
     @Override
-    public void Add(User user) {
+    public int Add(User user) {
         // Implementation to add a user
         if(!USERS.contains(user) && user != null) {
             USERS.add(user);    
+            return user.getID();
         }else{
-            return;
+            return -1;
         }
     }
 
@@ -86,10 +87,10 @@ public class User_Repository implements UserRepository {
     }
 
     @Override
-    public void Update(User Newuser) {
+    public int Update(User Newuser) {
         // Implementation to update a user
         Delete(Newuser.getID());
-        Add(Newuser);
+        return Add(Newuser);
     }
 
     @Override

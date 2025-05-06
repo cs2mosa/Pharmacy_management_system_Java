@@ -2,10 +2,9 @@ package Service_Interfaces;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Random;
 
 import Class_model.*;
 
@@ -17,14 +16,14 @@ abstract interface PaymentRepository {
 
     /**
      * Adds a new payment to the repository.
-     * 
      * @param payment The Payment object to be added.
+     * @return payment id on successs, -1 else
      */
-    void AddPayment(int PatientId, Payment payment); 
+    int AddPayment(int PatientId, Payment payment); 
 
     /**
      * Withdraws a payment from the repository using its unique identifier.
-     * 
+     * @param PatientId The unique identifier of the patient associated with the payment.
      * @param PaymentId The unique identifier of the payment to be withdrawn.
      */
     void DeletePayment(int PatientId, int PaymentId); 
@@ -33,10 +32,10 @@ abstract interface PaymentRepository {
      * Updates a specific field of a payment record in the repository.
      * 
      * @param PatientId The unique identifier of the patient associated with the payment.
-     * @param query The field to be updated.
-     * @param value The new value to be set for the specified field.
+     * @param Newpayment The new payment to be updated.
+     * @return 
      */
-    void UpdatePayment(int PatientId, Payment Newpayment); 
+    int UpdatePayment(int PatientId, Payment Newpayment); 
 
     /**
      * Retrieves a payment from the repository by its unique identifier.
@@ -45,17 +44,33 @@ abstract interface PaymentRepository {
      * @return The Payment object corresponding to the given PaymentId.
      */
     List<Payment> GetById(int PatientId); 
+
+    /**
+     * Retrieves a list of all payments in the repository.
+     * 
+     * @return A list of all Payment objects.
+     */
+    List<Payment> GetAllPayments();
+    
+    /**
+     * Retrieves a payment from the repository by its unique identifier.
+     * 
+     * @param PaymentId The unique identifier of the payment to be retrieved.
+     * @return The Payment object corresponding to the given PaymentId.
+     */
+    Payment GetPayment(int PaymentId); 
 }
 
 public class Payment_Repository implements PaymentRepository {
     // Singleton instance of Payment_Repository
     private static Payment_Repository instance = null;
     // Map to store payments:-> Integer : UserId.
-    private static Map<Integer,List<Payment>> PAYMENTS = new HashMap<>(); // Using Set for better search complexity
+    private static Map<Integer,List<Payment>> PAYMENTS; // Using Set for better search complexity
 
     // Private constructor to prevent instantiation from outside
     private Payment_Repository() {
         //private constructor for singleton design.
+        PAYMENTS = new HashMap<>(); 
     }
 
     // Method to get the singleton instance of Payment_Repository
@@ -70,15 +85,27 @@ public class Payment_Repository implements PaymentRepository {
     }
 
     @Override
-    public void AddPayment(int PatientId, Payment payment) {
+    public int AddPayment(int PatientId, Payment payment) {
         // Implementation to add a payment
-        List<Payment> payments = new ArrayList<>();
-        if(!PAYMENTS.containsKey(PatientId)){
-            payments = PAYMENTS.get(PatientId);
-            PAYMENTS.remove(PatientId);
+        // Check if the payment already exists in the repository
+
+        if(PAYMENTS.containsKey(PatientId)){
+            List<Payment> payments = PAYMENTS.get(PatientId);
+            for(Payment p : payments){
+                if(p.getID() == payment.getID()){
+                    return -1; // Payment already exists, return -1
+                }
+            }
+            payments.add(payment);
+        }else{
+            List<Payment> payments = new ArrayList<>();
+            payments.add(payment);
+            PAYMENTS.put(PatientId, payments);
         }
-        payments.add(payment);
-        PAYMENTS.put(PatientId, payments);
+        // Set the payment ID and status
+        payment.setID(new Random().nextInt(50000)); // Generate a random ID for the payment
+        payment.setStatus("Pending");
+        return payment.getID();
     }
 
     @Override
@@ -86,27 +113,43 @@ public class Payment_Repository implements PaymentRepository {
         // Implementation to withdraw a payment by ID
         if(PAYMENTS.containsKey(PatientId)){
             List<Payment> payments =  PAYMENTS.get(PatientId);
-            for(Payment pay : payments){
-                if(pay.getID() == PaymentId){
-                    payments.remove(pay);
-                    break;
-                }
-            }
-            PAYMENTS.remove(PatientId);
-            PAYMENTS.put(PatientId, payments);
+            payments.removeIf(payment -> payment.getID() == PaymentId);
         }
     }
 
     @Override
-    public void UpdatePayment(int PatientId, Payment Newpayment) {
+    public int UpdatePayment(int PatientId, Payment Newpayment) {
         // Implementation to update payment details
         DeletePayment(PatientId, Newpayment.getID());
-        AddPayment(PatientId, Newpayment);
+        return AddPayment(PatientId, Newpayment);
     }
 
     @Override
     public List<Payment> GetById(int PatientId) {
         // Implementation to get a payment by ID
-        return PAYMENTS.get(PatientId); // Placeholder return statement
+        return PAYMENTS.get(PatientId); 
+    }
+
+    @Override  
+    public List<Payment> GetAllPayments() {
+        // Implementation to get all payments
+        List<Payment> allPayments = new ArrayList<>();
+        for(List<Payment> paymentList : PAYMENTS.values()){
+            allPayments.addAll(paymentList);
+        }
+        return allPayments;
+    }
+
+    @Override
+    public Payment GetPayment(int PaymentId) {
+        // Implementation to get a payment by ID
+        for(List<Payment> paymentList : PAYMENTS.values()){
+            for(Payment payment : paymentList){
+                if(payment.getID() == PaymentId){
+                    return payment;
+                }
+            }
+        }
+        return null; // Placeholder return statement if not found
     }
 }

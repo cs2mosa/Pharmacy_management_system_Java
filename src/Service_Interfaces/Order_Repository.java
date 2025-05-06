@@ -1,36 +1,39 @@
 package Service_Interfaces;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Queue;
+import java.util.Map;
+import java.util.Random;
 
 import Class_model.Order;
-
 /**
  * orders memory interface should be a queue.
  * The OrderRepository interface defines the contract for managing orders in the system.
  * It provides methods for adding, deleting, updating, and retrieving orders, as well as
  * accessing order history.
+ * when creating Orders, User should be infromed with quantity of Items, and preveted from adding a non existed Item.
  */
 abstract interface OrderRepository {
 
     /**
      * Adds a new order to the repository.
      * @param order The order to be added.
+     * @return patient id on success , -1 else.
      */
-    void AddOrder(Order order); // Adds an order to the repository.
+    int AddOrder(int patientId, Order order); // Adds an order to the repository.
 
     /**
      * Deletes an existing order from the repository.
      * @param order The order to be deleted.
      */
-    void DeleteOrder(Order order); // Removes an order from the repository.
+    void DeleteOrder(int patientId,int orderId); // Removes an order from the repository.
 
     /**
      * Updates an existing order in the repository.
      * @param orderId The ID of the order to be updated.
      * @param Neworder The field or property to be updated.
      */
-    void UpdateOrder(int orderId, Order Neworder); // Updates an order's details.
+    int UpdateOrder(int orderId, Order Neworder); // Updates an order's details.
 
     /**
      * Retrieves a list of orders by the patient's name.
@@ -56,12 +59,13 @@ public class Order_Repository implements OrderRepository{
     // Singleton instance of Order_Repository
     private static Order_Repository instance = null;
     
-    // Queue to store orders
-    private static Queue<Order> ORDERS;
+    // Map to store orders ::-> Integer represents patientId associated with Order.
+    private static Map<Integer,List<Order>> ORDERS;
 
     // Private constructor to prevent instantiation from outside
     private Order_Repository() {
         // Initialize the orders queue here (e.g., using a LinkedList or another implementation)
+        ORDERS = new HashMap<>();
     }
 
     // Method to get the singleton instance of Order_Repository
@@ -73,32 +77,57 @@ public class Order_Repository implements OrderRepository{
     }
 
     @Override
-    public void AddOrder(Order order) {
+    public int AddOrder(int patientId, Order order) {
         // Implementation for adding an order to the queue
-        ORDERS.add(order);
+        List<Order> orders = ORDERS.get(patientId);
+        for(Order o : orders){
+            if(o.getOrderId() == order.getOrderId()){
+                return -1; // Order already exists
+            }
+        }
+        orders.add(order);
+        order.setOrderId(new Random().nextInt(50000));
+        ORDERS.put(patientId, orders); // Update the map with the new order
+        return patientId;
     }
 
     @Override
-    public void DeleteOrder(Order order) {
-        // Implementation for deleting an order from the queue
-
+    public void DeleteOrder(int patientId,int orderId) {
+        // Implementation for deleting an order from the Map
+        List<Order> orders = ORDERS.get(patientId);
+        if (orders != null) {
+            orders.removeIf(order -> order.getOrderId() == orderId);
+        }
     }
 
     @Override
-    public void UpdateOrder(int orderId, Order Neworder) {
-        // Implementation for updating an order in the queue
-        
+    public int UpdateOrder(int patientId, Order Neworder) {
+        // Implementation for updating an order in the Map
+        DeleteOrder( patientId,Neworder.getOrderId());
+        return  AddOrder(patientId, Neworder);
     }
 
     @Override
     public List<Order> GetByName(String PatientName) {
         // Implementation for retrieving orders by patient name
+        for (Map.Entry<Integer, List<Order>> entry : ORDERS.entrySet()) {
+            if (Patient_Repository.getInstance().GetPatient(entry.getKey()).getUsername() == PatientName) {
+                return entry.getValue(); // Return the list of orders for the matching patient
+            }
+        }
         return null; // Placeholder return statement, implement logic as needed
     }
 
     @Override
     public Order GetById(int orderId) {
         // Implementation for retrieving an order by its ID
+        for (Map.Entry<Integer, List<Order>> entry : ORDERS.entrySet()) {
+            for (Order order : entry.getValue()) {
+                if (order.getOrderId() == orderId) {
+                    return order; // Return the matching order
+                }
+            }
+        }
         // Return null if no matching order is found
         return null;
     }
@@ -106,6 +135,6 @@ public class Order_Repository implements OrderRepository{
     @Override
     public List<Order> GetHistory() {
         // Implementation for retrieving the history of all orders
-        return null; // Placeholder return statement, implement logic as needed
+        return (List<Order>) ORDERS.values().stream().flatMap(List::stream).toList();//flattening the List of lists of orders to a list of orders
     }   
 }

@@ -69,10 +69,11 @@ public class Items_Repository implements ItemsRepository{
     private static Items_Repository instance = null;
 
     // Set to store items
-    private Set<Item> ITEMS = new HashSet<>();
+    private Set<Item> ITEMS;
 
     private Items_Repository(){
         // Private constructor to prevent instantiation from outside
+        ITEMS = new HashSet<>();
     }
     
     public static Items_Repository GetInstance(){

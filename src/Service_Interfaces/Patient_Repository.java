@@ -1,15 +1,14 @@
 package Service_Interfaces;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import Class_model.Patient;
 
 /**
  * The PatientRepository interface defines the contract for managing patient records.
- * It provides methods to add, remove, update, retrieve, and list patients.
+ * It provides methods to add, remove, update, retrieve, Get, and list patients.
  */
 abstract interface PatientRepository {
 
@@ -17,7 +16,7 @@ abstract interface PatientRepository {
      * Adds a new patient to the repository.
      * @param patient The Patient object to be added.
      */
-    void AddPatient(Patient patient);
+    int AddPatient(Patient patient);
 
     /**
      * Removes a patient from the repository based on their unique ID.
@@ -28,10 +27,10 @@ abstract interface PatientRepository {
     /**
      * Updates a specific attribute of a patient in the repository.
      * @param PatientID The unique identifier of the patient to be updated.
-     * @param query The name of the attribute to be updated.
-     * @param value The new value to set for the specified attribute.
+     * @param Newpatient The patient to update.
+     * @return The status of the update operation. -1 if failed, 0 if successful.
      */
-    void UpdatePatient(int PatientID, Patient Newpatient);
+    int UpdatePatient(int PatientID, Patient Newpatient);
 
     /**
      * Retrieves a patient from the repository based on their unique ID.
@@ -44,17 +43,18 @@ abstract interface PatientRepository {
      * Retrieves a list of all patients in the repository.
      * @return A List containing all Patient objects in the repository.
      */
-    List<Patient> GetAllPatients();
+    Set<Patient> GetAllPatients();
 }
+
 public class Patient_Repository implements PatientRepository {
     // Singleton instance of Patient_Repository
     private static Patient_Repository instance = null;
     // Set to store patients
-    private Set<Patient> PATIENTS = new HashSet<>(); // Using Set for better search complexity
+    private Set<Patient> PATIENTS; // Using Set for better search complexity
 
     // Private constructor to prevent instantiation from outside
     private Patient_Repository() {
-
+        PATIENTS = new HashSet<>(); 
     }
 
     // Method to get the singleton instance of Patient_Repository
@@ -66,9 +66,14 @@ public class Patient_Repository implements PatientRepository {
     }
 
     @Override
-    public void AddPatient(Patient patient) {
-        if(!PATIENTS.contains(patient))
+    public int AddPatient(Patient patient) {
+        if(!PATIENTS.contains(patient)){
             PATIENTS.add(patient);
+            patient.setID(new Random().nextInt(50000)); // Set the ID to the size of the set
+            return patient.getID();
+        }else{
+            return -1;
+        }
     }
 
     @Override
@@ -79,9 +84,9 @@ public class Patient_Repository implements PatientRepository {
     }
 
     @Override
-    public void UpdatePatient(int PatientID, Patient Newpatient) {
+    public int UpdatePatient(int PatientID, Patient Newpatient) {
         RemovePatient(PatientID);
-        AddPatient(Newpatient);
+        return AddPatient(Newpatient);
     }
 
     @Override
@@ -95,9 +100,9 @@ public class Patient_Repository implements PatientRepository {
         return null; // Return null if not found
     }
     @Override
-    public List<Patient> GetAllPatients() {
+    public Set<Patient> GetAllPatients() {
         // Convert the Set to a List and return it.
-        return new ArrayList<>(PATIENTS);
+        return PATIENTS;
     }
     
 }

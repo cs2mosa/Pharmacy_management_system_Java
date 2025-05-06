@@ -17,9 +17,10 @@ public class Payment {
     // The method used for the payment (e.g., cash, credit card)
     private String Paymethod;
 
-    // The status of the payment (e.g., Pending, Completed)
+    // The status of the payment (e.g., Pending, Completed, Cancelled)
     private String status;
 
+    private Order order;
     /**
      * Constructs a Payment object with the specified ID, amount, payday, and payment method.
      * The status is initialized to "Pending".
@@ -29,14 +30,17 @@ public class Payment {
      * @param payday    the date of the payment
      * @param Paymethod the method used for the payment
      */
-    public Payment(int ID, double amount, String payday, String Paymethod) {
+    public Payment(int ID, double amount, String payday, String Paymethod, Order order) {
         this.ID = ID;
         this.amount = amount;
         this.payday = payday;
         this.Paymethod = Paymethod;
+        this.order = order;
         this.status = "Pending";
     }
-
+    public Payment(){
+        //default constructor
+    }
     /**
      * Sets the status of the payment.
      *
@@ -55,6 +59,21 @@ public class Payment {
         return status;
     }
 
+    /**
+     * Retrieves order that is associated with this payment
+     * @return the current order. 
+    */
+    public Order getOrder(){
+        return this.order;
+    }
+
+    /**
+     * Sets the order associated with this payment.
+     * @param order
+     */
+    public void setOrder(Order order){
+        this.order = order;
+    }
     /**
      * Retrieves the unique identifier of the payment.
      *

@@ -78,7 +78,11 @@ public class Patient extends User {
         this.orders = orders;
         this.PatientBalance = 0.0;
     }
-
+    public Patient(){
+        this.Age = 0;
+        this.address = " ";
+        this.PatientBalance = 0.0;
+    }
     /**
      * Sets the balance of the patient.
      *
@@ -187,6 +191,10 @@ public class Patient extends User {
      */
     public boolean Remove_order(Order order) {
         return this.orders.remove(order);
+    }
+
+    public List<Order> getOrders(){
+        return this.orders;
     }
     
 }

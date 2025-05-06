@@ -1,11 +1,12 @@
 ﻿# Pharmacy management system using java
-
+//payment and order should have the same id.
 ## Overview
 
 The Pharmacy Management System is a comprehensive solution designed to streamline pharmacy operations. It offers functionality for inventory management, prescription processing, sales transactions, and payment handling. This system is built with a clean, layered architecture focusing on core business logic without the complexity of web controllers.
 
 ## System Architecture
 
+![Example Image](images/UML.png)
 *adding UML here*
 
 ## Core Components

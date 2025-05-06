@@ -24,8 +24,12 @@ public class Casher extends User{
     /**
      * this function should only be used with restricted access
      */
-    public void setSalary(double salary){
-        this.salary = salary;
+    public int setSalary(double salary, boolean is_admin){
+        if(is_admin){
+            this.salary = salary;
+            return 0;
+        }
+        return -1;
     }
     public double getSalary(){
         return salary;

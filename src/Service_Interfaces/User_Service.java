@@ -6,11 +6,12 @@ import Class_model.User;
  * UserServiceInterface defines the contract for user-related operations.
  * This interface provides methods for adding, updating, deleting, authenticating,
  * deactivating, activating users, changing passwords, and checking access permissions.
+ * NOTE: Patient services are extending this service, please make sure to think about that.
  */
 interface UserServiceInterface {
 
     /**
-     * Adds a new user to the system.
+     * Adds a new user to the system, For every user except Patients
      * @param user The User object to be added.
      */
     void AddUser(User user);
@@ -46,7 +47,7 @@ interface UserServiceInterface {
      * Activates a user account in the system.
      * @param userId The unique identifier of the user to be activated.
      */
-    void activateUser(Long userId);
+    void activateUser(int userId);
 
     /**
      * Changes the password for a user.
@@ -55,7 +56,7 @@ interface UserServiceInterface {
      * @param NewPassword The new password to be set.
      * @return true if the password is successfully changed, false otherwise.
      */
-    boolean ChangePassword(String user, String oldPassword, String NewPassword);
+    boolean ChangePassword(String username, String oldPassword, String NewPassword);
 
     /**
      * Checks if a user has access permissions.
@@ -64,7 +65,24 @@ interface UserServiceInterface {
      */
     boolean CheckAccess(User user);
 }
+
 public class User_Service implements UserServiceInterface {
+
+    /**
+     * singleton design for less memory usage, only 1 object is needed.
+     */
+    private static User_Service instance;
+
+    private User_Service() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static User_Service getInstance() {
+        if (instance == null) {
+            instance = new User_Service();
+        }
+        return instance;
+    }
 
     @Override
     public void AddUser(User user) {
@@ -93,12 +111,12 @@ public class User_Service implements UserServiceInterface {
     }
     
     @Override
-    public void activateUser(Long userId) {
+    public void activateUser(int userId) {
         // Implementation for activating a user
     }
 
     @Override
-    public boolean ChangePassword(String user, String oldPassword, String NewPassword) {
+    public boolean ChangePassword(String username, String oldPassword, String NewPassword) {
         // Implementation for changing a user's password
         return false;
     }

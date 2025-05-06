@@ -23,7 +23,7 @@ public class Order {
     private String orderDate;
 
     /** The cashier who checked the order. */
-    private Casher checkedBy;
+    private String checkedBy;
 
     /** Total price of the order. */
     private double totalPrice;
@@ -62,7 +62,7 @@ public class Order {
     }
 
     /** @return The cashier who checked the order. */
-    public Casher getCheckedBy() {
+    public String getCheckedBy() {
         return checkedBy;
     }
 
@@ -85,8 +85,12 @@ public class Order {
      * Sets the unique identifier for the order.
      * @param orderId The new order ID.
      */
+    private boolean is_set_id = false;
     public void setOrderId(int orderId) {
-        this.orderId = orderId;
+        if(!is_set_id){
+            this.orderId = orderId;
+            is_set_id = true;
+        }
     }
 
     /**
@@ -101,7 +105,7 @@ public class Order {
      * Sets the cashier who checked the order.
      * @param checkedBy The new cashier.
      */
-    public void setCheckedBy(Casher checkedBy) {
+    public void setCheckedBy(String checkedBy) {
         this.checkedBy = checkedBy;
     }
 
@@ -177,7 +181,7 @@ public class Order {
         //data fields
         private int orderId;
         private String orderDate;
-        private Casher checkedBy;
+        private String checkedBy;
         private double totalPrice;
         private String status = "Pending"; //default value.
         private List<Item> orderItems = new ArrayList<>();
@@ -191,7 +195,7 @@ public class Order {
             this.orderDate = orderDate;
             return this;
         }
-        public builder setCheckedBy(Casher checkedBy) {
+        public builder setCheckedBy(String checkedBy) {
             this.checkedBy = checkedBy;
             return this;
         }
