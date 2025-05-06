@@ -6,10 +6,9 @@ The Pharmacy Management System is a comprehensive solution designed to streamlin
 
 ## System Architecture
 
-![Example Image](images/UML.png)
-*adding UML here*
 
-## Core Components
+![Example Image](images/UML.png)
+
 
 ### Entity Classes
 - **Product**: Medications and supplies
