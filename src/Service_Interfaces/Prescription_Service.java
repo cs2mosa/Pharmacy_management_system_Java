@@ -1,5 +1,6 @@
 package Service_Interfaces;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -45,7 +46,7 @@ abstract interface PrescriptionServiceInterface {
      * @param PatientId The ID of the patient whose prescriptions are to be retrieved.
      * @return A list of Prescription objects for the specified patient.
      */
-    List<Prescription> GetPrescriptionByName(String patientName);
+    List<Prescription> GetPrescriptionsByName(String patientName);
 
     /**
      * Retrieves a list of all prescriptions in the system.
@@ -106,97 +107,163 @@ public class Prescription_Service implements PrescriptionServiceInterface {
         }
     }
 
+    //works fine
+    @Override
+    public int AddPrescription(int UserId, Prescription prescription) {
+        // Implementation for adding a prescription
+        try {
+            if (prescription == null) throw new IllegalArgumentException("Prescription cannot be null, check usage");
+            if (prescription.getIssuedBy() == null) throw new IllegalArgumentException("Pharmacist cannot be null, check usage");
+            if (prescription.getPatientName() == null) throw new IllegalArgumentException("Patient name cannot be null, check usage");
+            if (prescription.getItems() == null || prescription.getItems().isEmpty()) throw new IllegalArgumentException("Items cannot be null or empty, check usage");
+            return Prescription_Repository.GetInstance().Add(UserId, prescription);
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("Error in adding prescription: " + e.getMessage());
+            return -1; // Return -1 to indicate failure
+        }
+    }
+    //works fine
+    @Override
+    public int DeletePrescription(int UserId, int preID) {
+        // Implementation for deleting a prescription
+        try {
+            return Prescription_Repository.GetInstance().Delete(UserId, preID);
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("Error in deleting prescription: " + e.getMessage());
+            return -1; // Return -1 to indicate failure
+        }
+    }
+    //works fine.
+    @Override
+    public int UpdatePrescription(int PreID, String query, Object value) {
+        // Implementation for updating a prescription
+        Prescription prescription = Prescription_Repository.GetInstance().getPreById(PreID);
+        try {
+            if (prescription == null) throw new IllegalArgumentException("Prescription not found, check the ID.");
+            if (query == null || query.isEmpty()) throw new IllegalArgumentException("Query cannot be null or empty, check usage."); 
+            switch (query) {
+                case "status":
+                    if(value instanceof String){
+                        prescription.setStatus((String)value);
+                    }else{
+                        throw new IllegalArgumentException("Invalid value type for status, expected String.");
+                    }
+                    break;
+                case "Items":
+                    if(value instanceof Set<?>) {
+                        @SuppressWarnings("unchecked")//suppressing warning as the object will always be a set of items.
+                        Set<Item> items = new HashSet<>((Set<Item>) value);
+                        prescription.setItems(items);
+                    }else{
+                        throw new IllegalArgumentException("Invalid value type for Items, expected Set<Item>.");
+                    }
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid query, check usage.");
+            }
+            return prescription.getId();
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("Error in updating prescription: " + e.getMessage());
+            return -1; // Return -1 to indicate failure
+        }
+    }
+    //works fine
     @Override
     public Prescription getPreById(int preID){
         //adding more freatures here.
         return Prescription_Repository.GetInstance().getPreById(preID);
     }
-
+    //works fine.
     @Override
-    public int AddPrescription(int UserId, Prescription prescription) {
-        // Implementation for adding a prescription
-        return Prescription_Repository.GetInstance().Add(UserId, prescription);
-    }
-
-    @Override
-    public int DeletePrescription(int UserId, int preID) {
-        // Implementation for deleting a prescription
-        return Prescription_Repository.GetInstance().Delete(preID, preID);
-    }
-
-    @Override
-    public int UpdatePrescription(int PreID, String query, Object value) {
-        // Implementation for updating a prescription
-        Prescription prescription = Prescription_Repository.GetInstance().getPreById(PreID);
-        if (prescription == null) return -1; 
-        switch (query) {
-            case "status":
-                if(value instanceof String){
-                    prescription.setStatus(query);
-                }
-                break;
-            case "Items":
-                if(value instanceof Set<?>) {
-                    @SuppressWarnings("unchecked")//suppressing warning as the object will always be a set of items.
-                    Set<Item> items = new HashSet<>((Set<Item>) value);
-                    prescription.setItems(items);
-                }
-                break;
-            default:
-                return -1;
-        }
-        return prescription.getId(); // Return the ID of the updated prescription
-    }
-    
-    @Override
-    public List<Prescription> GetPrescriptionByName(String patientName) {
+    public List<Prescription> GetPrescriptionsByName(String patientName) {
         // Implementation for retrieving prescriptions by patient ID
-        return Prescription_Repository.GetInstance().findByPatientID(Patient_Repository.getInstance().GetPatient(0).getID());
+        try {
+            if (patientName == null || patientName.isEmpty()) throw new IllegalArgumentException("Patient name cannot be null or empty, check usage");
+            if (Patient_Service.getInstance().GetPatient(patientName) == null) throw new IllegalArgumentException("Patient not found, check the name.");
+            return Prescription_Repository.GetInstance().findByPatientID(Patient_Service.getInstance().GetPatient(patientName).getID());
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("Error in retrieving prescriptions by patient name: " + e.getMessage());
+            return new ArrayList<>(); // Return null to indicate failure
+        }
+            
     }
-
+    //works fine.
     @Override
     public List<Prescription> GetAllPrescriptions() {
         // Implementation for retrieving all prescriptions
         return Prescription_Repository.GetInstance().findAll();
     }
-
+    //works fine.
     @Override
     public int FillPrescription(int preID) {
         // Implementation for filling a prescription
-        if(Prescription_Repository.GetInstance().getPreById(preID) == null){
-            return -1;
-        }
-        Prescription_Repository.GetInstance().getPreById(preID).setStatus("Filled");
-        return preID; // Return the ID of the filled prescription
-    }
+        try {
+            Prescription prescription = Prescription_Repository.GetInstance().getPreById(preID);
+            if (prescription == null) throw new IllegalArgumentException("Prescription not found, check the ID.");
+            if (prescription.getStatus().equals("Filled")) throw new IllegalArgumentException("Prescription already filled, check the ID.");
+            if (prescription.getStatus().equals("Pending")) {
+                prescription.setStatus("Filled");
+                return preID; // Return the ID of the filled prescription
+            } else {
+                throw new IllegalArgumentException("Invalid status, check the ID.");
+            }
 
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in filling prescription: " + e.getMessage());
+            return -1; // Return -1 to indicate failure
+        }
+    }
+    //works fine.
     @Override
     public int IssuePrescription(Pharmacist pharmacist, int patientId ,int OrderId){
-        //implementation                                      
-        @SuppressWarnings("unchecked")
-        Set<Item> orderItems = (Set<Item>) Order_Service.getInstance().GetById(OrderId).getOrderItems();
-        for(Item item : Order_Service.getInstance().GetById(OrderId).getOrderItems()){
-            if(!pharmacist.is_safe(item, Patient_Repository.getInstance().GetPatient(patientId))){
-                return -1;
+        //implementation     
+        try {
+            Order temp = Order_Repository.getInstance().GetById(OrderId);
+            Patient tempPatient = Patient_Repository.getInstance().GetPatient(patientId);
+            if (pharmacist == null) throw new IllegalArgumentException("Pharmacist cannot be null, check usage");
+            if (temp == null) throw new IllegalArgumentException("Order not found, check the ID.");
+            if (tempPatient == null) throw new IllegalArgumentException("Patient not found, check the ID.");
+            List<Item> orderItemList = temp.getOrderItems();
+            Set<Item> orderItems = new HashSet<>(orderItemList);
+            for(Item item : orderItemList){
+                if(!pharmacist.is_safe(item, tempPatient)){
+                    return -1;
+                }
             }
-        }
-        Prescription prescription = new Prescription(new Random().nextInt(50000),Patient_Repository.getInstance().GetPatient(patientId).getUsername(), pharmacist, orderItems);
-        prescription.setStatus("Pending");
-        return AddPrescription(patientId,prescription);
+            Prescription prescription = new Prescription(new Random().nextInt(50000),tempPatient.getUsername(), pharmacist, orderItems);
+            prescription.setStatus("Issued");
+            return AddPrescription(patientId,prescription);
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("Error in issuing prescription: " + e.getMessage());
+            return -1; // Return -1 to indicate failure
+        }                              
     }
-
+    //works fine
     @Override
     public boolean CheckPrescriptionValidity(int prescriptionId, Pharmacist pharmacist) {
         // Implementation for checking prescription validity
-        Prescription prescription = Prescription_Repository.GetInstance().getPreById(prescriptionId);
-        if (prescription != null) {
+        try {
+            Prescription prescription = Prescription_Repository.GetInstance().getPreById(prescriptionId);
+            if (prescription == null) throw new IllegalArgumentException("Prescription not found, check the ID.");
+            if (pharmacist == null) throw new IllegalArgumentException("Pharmacist cannot be null, check usage");
+            if (prescription.getStatus().equals("Expired")) throw new IllegalArgumentException("Prescription expired, check the ID.");
             Patient temp = Patient_Service.getInstance().GetPatient(prescription.getPatientName());
             for(Item item : prescription.getItems()) {
                 if(!pharmacist.is_safe(item, temp)){
                     return false;
                 }
             }
+            return true; // Return true to indicate valid prescription.
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in checking prescription validity: " + e.getMessage());
+            return false; // Return false to indicate failure
         }
-        return true;
     }
 }

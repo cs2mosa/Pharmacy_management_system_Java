@@ -18,35 +18,40 @@ abstract interface PrescriptionRepository {
      * @param prescription The Prescription object to be added.
      * @param userId The ID of the user associated with the prescription.
      * @return prescription id on success. -1 else.
+     * @throws IllegalArgumentException if the prescription is null or if the user ID is invalid.
      */
-    int Add(int userId, Prescription prescription);    
+    int Add(int userId, Prescription prescription) throws IllegalArgumentException;    
 
     /**
      * Deletes a prescription from the repository based on its unique ID.
      * @param ID The unique identifier of the prescription to be deleted.
      * @return status code of 0 on success , -1 else.
+     * @throws IllegalArgumentException if the prescription ID is invalid or if the user ID is invalid.
      */
-    int Delete(int userId, int ID);
+    int Delete(int userId, int ID) throws IllegalArgumentException;
 
     /**
      * Finds and retrieves a list of prescriptions associated with a specific patient's name.
      * @param patientName The name of the patient whose prescriptions are to be retrieved.
      * @return A list of prescriptions matching the given patient name. or null if not found.
+     * @throws IllegalArgumentException if the patient name is null or empty.
      */
-    List<Prescription> findByPatientID(int patientId);
+    List<Prescription> findByPatientID(int patientId) throws IllegalArgumentException;
 
     /**
      * Retrieves all prescriptions from the repository.
      * @return A list of all prescriptions. or null if not found.
+     * @throws IllegalArgumentException if no prescriptions are found.
      */
-    List<Prescription> findAll();
+    List<Prescription> findAll() throws IllegalArgumentException;
 
     /**
      * Retrieves a prescription by its unique ID.
      * @param preID The unique identifier of the prescription to be retrieved.
      * @return The Prescription object corresponding to the given ID, or null if not found.
+     * @throws IllegalArgumentException if the prescription ID is invalid or if no prescriptions are found.
      */
-    public Prescription getPreById(int preID);
+    Prescription getPreById(int preID) throws IllegalArgumentException;
 }
 class Prescription_Repository implements PrescriptionRepository {
     
@@ -69,59 +74,78 @@ class Prescription_Repository implements PrescriptionRepository {
             return instance;
         }
     }
-    
+    //works fine
     @Override
-    public int Add(int userId, Prescription prescription) {
+    public int Add(int userId, Prescription prescription)  throws IllegalArgumentException{
         // Implementation for adding a prescription
         List<Prescription> temp = PRESCRIPTIONS.get(userId);
-        if (temp == null || prescription == null || Patient_Repository.getInstance().GetPatient(userId) == null) {
-            return -1; // Invalid prescription
-        }
-        if(temp.isEmpty()){
+        if(Patient_Repository.getInstance().GetPatient(userId) == null) throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
+        if (prescription == null) throw new IllegalArgumentException("prescription cannot be null, check usage");
+        if(temp == null ||temp.isEmpty()){
             temp = new ArrayList<>();
             temp.add(prescription);
             PRESCRIPTIONS.put(userId,temp);
             return prescription.getId();
         }
-        PRESCRIPTIONS.get(userId).add(prescription);
+        temp.add(prescription);
         return prescription.getId();
     }
-
+    //works fine
     @Override
-    public int Delete(int userId, int ID) {
+    public int Delete(int userId, int ID) throws IllegalArgumentException {
         // Implementation for deleting a prescription
-        List<Prescription> prescriptions = PRESCRIPTIONS.get(userId);
-        if (prescriptions == null || prescriptions.isEmpty()) {
-            return -1; // No prescriptions found for the user
-        }
-        for(Prescription prescription : prescriptions){
-            if(prescription.getId() == ID){
-                prescriptions.remove(prescription);
-                return 0;
+        try {
+            List<Prescription> prescriptions = PRESCRIPTIONS.get(userId);
+            if(Patient_Repository.getInstance().GetPatient(userId) == null) throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
+            if (prescriptions == null || prescriptions.isEmpty()) throw new IllegalArgumentException("No prescriptions found for the given user ID.");
+            for(Prescription prescription : prescriptions){
+                if(prescription.getId() == ID){
+                    prescriptions.remove(prescription);
+                    return 0;
+                }
             }
+            return -1;
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("Error in deleting prescription: " + e.getMessage());
+            return -1; // Error occurred during deletion
         }
-        return -1; // Prescription not found
     }
-
+    //works fine
     @Override
     public List<Prescription> findByPatientID(int patientId) {
         // Implementation for finding prescriptions by patient ID
         return PRESCRIPTIONS.get(patientId);
     }
-
+    //works fine
     @Override
-    public List<Prescription> findAll() {
+    public List<Prescription> findAll()  throws IllegalArgumentException{
         // Implementation for finding all prescriptions
-        return (List<Prescription>)PRESCRIPTIONS.values().stream().flatMap(List::stream).toList();
+        try {
+            if (PRESCRIPTIONS.isEmpty()) throw new IllegalArgumentException("No prescriptions found.");
+            return (List<Prescription>)PRESCRIPTIONS.values().stream().flatMap(List::stream).toList();
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("Error in finding all prescriptions: " + e.getMessage());
+            return null; // Error occurred during retrieval
+        }
     }
-
+    //works fine
     @Override
-    public Prescription getPreById(int preID){
-        return PRESCRIPTIONS.values()
+    public Prescription getPreById(int preID) throws IllegalArgumentException{
+        try {
+            if (PRESCRIPTIONS.isEmpty()) throw new IllegalArgumentException("No prescriptions are found.");
+            if (PRESCRIPTIONS.values() == null) throw new IllegalArgumentException("Prescription database is empty.");
+            return PRESCRIPTIONS.values()
                 .stream()
                 .flatMap(List::stream)
                 .filter(prescription -> prescription.getId() == preID)
                 .findFirst()
                 .orElse(null);
+        } catch (Exception e) {
+            //handle exception
+            System.out.println("Error in finding prescription by ID: " + e.getMessage());
+            return null; // Error occurred during retrieval
+        }
     }
 }

@@ -29,8 +29,9 @@ interface UserServiceInterface {
     /**
      * Deletes a user from the system.
      * @param user The identifier of the user to be deleted.
+     * @return The unique identifier of the deleted user. -1 if the user does not exist.
      */
-    void DeleteUser(String user);
+    int DeleteUser(String user);
 
     /**
      * Authenticates a user based on their credentials.
@@ -38,6 +39,20 @@ interface UserServiceInterface {
      * @return true if authentication is successful, false otherwise.
      */
     boolean AuthenticateUser(User user);
+    
+    /**
+     * Retrieves a user by their username.
+     * @param username The username of the user to retrieve.
+     * @return The User object corresponding to the given username, or null if not found.
+     */
+    User GetByUsername(String username);
+
+    /**
+     * Retrieves a user by their unique ID.
+     * @param ID The unique identifier of the user to retrieve.
+     * @return The User object corresponding to the given ID, or null if not found.
+     */
+    User GetByID(int ID);
 }
 
 public class User_Service implements UserServiceInterface {
@@ -57,65 +72,126 @@ public class User_Service implements UserServiceInterface {
         }
         return instance;
     }
-
+    //works fine
     @Override
     public int AddUser(User user) {
         // Implementation for adding a user
-        return User_Repository.GetInstance().Add(user);
+        try {
+            //if (user == null) throw new IllegalArgumentException("User cannot be null");
+            //if(user.getUsername() == null || user.getPassword() == null) throw new IllegalArgumentException("Username or password cannot be null");
+            return User_Repository.GetInstance().Add(user);
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("Error adding user: " + e.getMessage());
+            return -1; // Return -1 if an error occurs
+        }
+    }
+    //works fine
+    @Override
+    public int DeleteUser(String user) {
+        // Implementation for deleting a user
+        try {
+            User temp = User_Repository.GetInstance().GetByUsername(user);
+            if(temp == null) throw new IllegalArgumentException("User not found");
+            return User_Repository.GetInstance().Delete(temp.getID());
+        } catch (Exception e) {
+            //handle exception
+            System.out.println("Error deleting user: " + e.getMessage());
+            return -1; // Return -1 if an error occurs
+        }
     }
 
     @Override
     public int UpdateUser(String user, String query, Object value) {
         // Implementation for updating a user
-        User temp = User_Repository.GetInstance().GetByUsername(user);
-        if(temp == null) return -1;
-        switch (query) {
-            case "username":
-                if(value instanceof String){
-                    temp.setUsername((String)value);
-                }
-                break;
-            case "password":
-                if(value instanceof String){
-                    temp.setPassword((String)value);
-                }
-                break;
-            
-            case "email":
-                if(value instanceof String){
-                    temp.setUserEmail((String)value);
-                }
-                break;
-            case "phone":
-                if(value instanceof String){
-                    temp.setPhoneNumber((String)value);
-                }
-                break;
-            case "activate":
-                if(value instanceof Boolean){
-                    temp.setactive((Boolean)value);
-                }
-                break;
-            default:
-                return -1;
+        try {
+            User temp = User_Repository.GetInstance().GetByUsername(user);
+            if(temp == null) throw new IllegalArgumentException("User not found");
+            if(query== null || query.isEmpty()) throw new IllegalArgumentException("query cannot be null or empty");
+            switch (query) {
+                case "username":
+                    if(value instanceof String && !((String)value).isEmpty()){
+                        temp.setUsername((String)value);
+                        return temp.getID();
+                    }
+                    throw new IllegalArgumentException("invalid value type. or value");
+                case "password":
+                    if(value instanceof String && !((String)value).isEmpty()){
+                        temp.setPassword((String)value);
+                        return temp.getID();
+                    }
+                    throw new IllegalArgumentException("invalid value type. or value");
+                case "email":
+                    if(value instanceof String && !((String)value).isEmpty()){
+                        temp.setUserEmail((String)value);
+                        return temp.getID();
+                    }
+                    throw new IllegalArgumentException("invalid value type. or value");
+                case "phone":
+                    if(value instanceof String && !((String)value).isEmpty()){
+                        temp.setPhoneNumber((String)value);
+                        return temp.getID();
+                    }
+                    throw new IllegalArgumentException("invalid value type. or value");
+                case "activate":
+                    if(value instanceof Boolean){
+                        temp.setactive((Boolean)value);
+                        return temp.getID();
+                    }
+                    throw new IllegalArgumentException("invalid value type. or value");
+                default:
+                    throw new IllegalArgumentException("invalid query type. or value");
+            }
+        } catch (Exception e) {
+            //handle exception
+            System.out.println("Error updating user: " + e.getMessage());
+            return -1; // Return -1 if an error occurs
         }
-        return temp.getID();
     }
-
+    
+    //works fine
     @Override
-    public void DeleteUser(String user) {
-        // Implementation for deleting a user
-        User_Repository.GetInstance().Delete(User_Repository.GetInstance().GetByUsername(user).getID());
+    public User GetByUsername(String username) {
+        // Implementation for getting a user by username
+        try {
+            return User_Repository.GetInstance().GetByUsername(username);
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("Error getting user by username: " + e.getMessage());
+            return null; // Return null if an error occurs
+        }
     }
 
+    //works fine
+    @Override
+    public User GetByID(int ID) {
+        // Implementation for getting a user by ID
+        try {
+            return User_Repository.GetInstance().GetByID(ID);
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("Error getting user by ID: " + e.getMessage());
+            return null; // Return null if an error occurs
+        }
+    }
+    //works fine.
     @Override
     public boolean AuthenticateUser(User user) {
         // Implementation for authenticating a user
-        User temp = User_Repository.GetInstance().GetByUsername(user.getUsername());
-        if(temp == null || !temp.getPassword().equals(user.getPassword())){
-            return false;
-        }else{
-            return true;
+        try {
+            User temp = User_Repository.GetInstance().GetByUsername(user.getUsername());
+            if (user == null || user.getUsername() == null || user.getPassword() == null) throw new IllegalArgumentException("Username or password cannot be null");
+            if (user.getUsername().isEmpty() || user.getPassword().isEmpty()) throw new IllegalArgumentException("Username or password cannot be empty");
+            if(temp == null) throw new IllegalArgumentException("User not found");
+            if(!temp.getPassword().equals(user.getPassword())){
+                return false;
+            }else{
+                return true;
+            }
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("Error authenticating user: " + e.getMessage());
+            return false; // Return false if an error occurs
         }
     }
 }

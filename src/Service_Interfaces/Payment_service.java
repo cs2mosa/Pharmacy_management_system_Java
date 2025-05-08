@@ -17,7 +17,7 @@ abstract interface PaymentServiceInterface {
      * @param payment The Payment object to be added.
      * @return payment id on success, -1 else.
      */
-    int AddPayment(int PatientId, Payment payment, int OrderId); 
+    int AddPayment(int PatientId, Payment payment); 
 
     /**
      * Withdraws a payment from the repository using its unique identifier. marks the payment with id of -1.
@@ -31,6 +31,7 @@ abstract interface PaymentServiceInterface {
      * Processes a payment based on the provided payment ID.
      * @param PatientId The unique identifier of the patient making the payment.
      * @param OrderId The unique identifier of the order associated with the payment.PaymentId is the same as OrderId.
+     * @return The status of the payment processing operation. Payment id if successful, -1 if failed.
      */
     int ProcessPayment(int PatientId, int OrderId);
 
@@ -71,37 +72,34 @@ public class Payment_service implements PaymentServiceInterface{
         return instance;
     }
 
+    //works fine
     @Override
-    public int AddPayment(int PatientId, Payment payment, int OrderId) {
+    public int AddPayment(int PatientId, Payment payment) {
         // Implementation for adding a payment
-        if(payment == null || Order_Service.getInstance().GetById(OrderId) == null || Patient_Repository.getInstance().GetPatient(PatientId) == null)
-            return -1; //failed
-        payment.setID(OrderId);
-        payment.setStatus("Pending");
-        payment.setOrder(Order_Repository.getInstance().GetById(OrderId));
-        payment.setAmount(Order_Repository.getInstance().GetById(OrderId).getTotalPrice());
-        Payment_Repository.GetInstance().AddPayment(PatientId, payment);
-        Order_Repository.getInstance().GetById(OrderId).setStatus("Pending");
+        try {
+            return Payment_Repository.GetInstance().AddPayment(PatientId, payment);
+        } catch (Exception e) {
+            System.out.println("error adding payment: " + e.getMessage());
+            return -1;
+            // handle exception
+        }
+        
+    }  
 
-        return payment.getID();
-    }
-
+    //works fine
     @Override
     public int WithdrawPayment(int PatientId, int PaymentId) {
-        // Implementation for withdrawing a payment
-        Payment temp = Payment_Repository.GetInstance().GetPayment(PaymentId);
-        if(temp == null || Patient_Repository.getInstance().GetPatient(PatientId) == null) 
+        try {
+            return Payment_Repository.GetInstance().DeletePayment(PatientId,PaymentId);// Payment successfully withdrawn
+            
+        }catch (Exception e) {
+            // handle exception
+            System.out.println("error deleting payment: " + e.getMessage());
             return -1;
-        for(Item itm : temp.getOrder().getOrderItems()){
-            if (!itm.is_Refundable()){
-                return -1; // Item is not refundable
-            }
         }
-        temp.setStatus("Cancelled");
-        temp.setID(-1);
-        return 0; // Payment successfully withdrawn
     }
 
+    //works fine
     @Override
     public String generateReceipt(int paymentId) {
         // Implementation for generating a receipt
@@ -109,18 +107,22 @@ public class Payment_service implements PaymentServiceInterface{
         if(payment != null) {
             return payment.toString();
         }
-        return null;
+        return "no Receipt found for this payment";
     }
 
+    //works fine
     @Override
     public int UpdatePayment(int PatientId, String query, Object value) {
         // Implementation for updating a payment
         Payment payment = Payment_Repository.GetInstance().GetPayment(PatientId);
-        if (payment == null) return -1;
+        if (payment == null || query == null) return -1;
         switch (query) {
             case "amount":
                 if (value instanceof Double) {
                     payment.setAmount((Double) value);
+                }
+                if (value instanceof Integer) {
+                    payment.setAmount((Integer) value);
                 }
                 break;
             case "payday":
@@ -143,6 +145,8 @@ public class Payment_service implements PaymentServiceInterface{
     public int ProcessPayment(int PatientId, int PaymentId){
         Payment temppay = Payment_Repository.GetInstance().GetPayment(PaymentId);
         Patient tempPatient = Patient_Repository.getInstance().GetPatient(PatientId);
+        if(tempPatient == null  || temppay == null) return -1; //failed
+
         if(tempPatient.GetBalance() >= temppay.getOrder().getTotalPrice()){
             //check if the payment is already paid
             if(temppay.getStatus() == "Paid" || temppay.getStatus() == "Cancelled"){
@@ -155,10 +159,24 @@ public class Payment_service implements PaymentServiceInterface{
             Patient_Repository.getInstance().UpdatePatient(PatientId, tempPatient);
             Order_Repository.getInstance().GetById(PaymentId).setStatus("Paid");
             Admin.setTotalIncome(Admin.gettotalIncome() + (tempPatient.GetBalance() - temppay.getOrder().getTotalPrice()));
-            return 1;
+            return PaymentId; //successfully processed payment
         }
         else{
             return -1;
         }
     }
 }
+
+/*
+ * // Implementation for adding a payment
+        if(payment == null || Order_Service.getInstance().GetById(OrderId) == null || Patient_Repository.getInstance().GetPatient(PatientId) == null)
+            return -1; //failed
+        payment.setID(OrderId);
+        payment.setStatus("Pending");
+        payment.setOrder(Order_Repository.getInstance().GetById(OrderId));
+        payment.setAmount(Order_Repository.getInstance().GetById(OrderId).getTotalPrice());
+        Payment_Repository.GetInstance().AddPayment(PatientId, payment);
+        Order_Repository.getInstance().GetById(OrderId).setStatus("Pending");
+
+        return payment.getID();
+ */

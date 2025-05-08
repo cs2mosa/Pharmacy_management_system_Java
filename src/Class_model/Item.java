@@ -221,6 +221,21 @@ public class Item {
         this.healing_effects = healing_effects;
     }
 
+    @Override
+    public String toString() {
+        return "Item{" +
+                "medicName='" + medic_name + '\'' +
+                ", expireDate='" + expire_date + '\'' +
+                ", category='" + category + '\'' +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", usage='" + usage + '\'' +
+                ", is_refundable=" + is_refundable +
+                ", healing_effects=" + healing_effects +
+                ", side_effects=" + side_effects +
+                '}';
+    }
+
     /**
      * builder class
      */
@@ -269,7 +284,10 @@ public class Item {
             this.healing_effects = healing_effects;
             return this;
         }
-
+        public builder setCategory(String category) {
+            this.category = category;
+            return this;
+        }
         public Item build(){
             return new Item(this);
         }

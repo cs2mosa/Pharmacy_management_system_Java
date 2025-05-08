@@ -30,7 +30,7 @@ abstract interface InventoryServiceInterface {
      * @param value The new price of the item.(Positive only)
      * @return 0 if the item is updated successfully, -1 if the item does not exist.
      */
-    int UpdateItemPrice(String itemName, int value);
+    int UpdateItemPrice(String itemName, float value);
 
     /**
      * Retrieves an item from the inventory by its name.
@@ -84,6 +84,7 @@ public class Inventory_service implements InventoryServiceInterface{
         }
         return instance;
     }
+    //works fine
     @Override
     public int AddNewItem(Item item){
         if(Admin.authorizeItem(item) && Items_Repository.GetInstance().GetItemByName(item.getMedicName()) == null){
@@ -92,7 +93,7 @@ public class Inventory_service implements InventoryServiceInterface{
         }
         return -1; // Item already exists or not authorized.
     }
-
+    //works fine
     @Override
     public int RemoveItemByName(String Itemname){
         if(Items_Repository.GetInstance().GetItemByName(Itemname) != null){
@@ -103,21 +104,23 @@ public class Inventory_service implements InventoryServiceInterface{
             return -1; // Item not found.
         }
     }
-
+    //works fine 
     @Override
-    public int UpdateItemPrice(String itemName, int value){
+    public int UpdateItemPrice(String itemName, float value){
         if(Items_Repository.GetInstance().GetItemByName(itemName)!= null){
             Items_Repository.GetInstance().GetItemByName(itemName).setPrice(value);
             return 0;
         }
         return -1; // Item not found.
     }
-
+    
+    //works fine
     @Override
     public Item GetItemByName(String ItemName){
         //other functionalities to be added here.
         return Items_Repository.GetInstance().GetItemByName(ItemName);
     }
+
 
     @Override
     public List<Item> GetItemsByCategory(String category){
@@ -125,6 +128,7 @@ public class Inventory_service implements InventoryServiceInterface{
         return Items_Repository.GetInstance().GetItemsByCategory(category);
     }
 
+    //works fine
     @Override
     public int updateStock(String item, int quantity){
         //other functionalities to be added here.
@@ -136,9 +140,11 @@ public class Inventory_service implements InventoryServiceInterface{
         }
     }    
 
+    //works fine
     @Override
     public List<String> getLowStockItems(){
         List<Item> temp = Items_Repository.GetInstance().GetAllItems();
+        if(temp == null) return null;
         List<String> lowstocks = new ArrayList<>();
         if(!temp.isEmpty()){
             for(Item item : temp){

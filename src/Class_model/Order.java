@@ -115,6 +115,10 @@ public class Order {
      */
     public void setOrderItems(List<Item> orderItems) {
         this.orderItems = orderItems;
+        this.totalPrice = 0.0;
+        for(Item item : orderItems){
+            this.totalPrice += item.getPrice();
+        }
     }
 
     /**
@@ -174,6 +178,17 @@ public class Order {
         status = "Cancelled";
     }
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId=" + orderId +
+                ", orderDate='" + orderDate + '\'' +
+                ", checkedBy='" + checkedBy + '\'' +
+                ", totalPrice=" + totalPrice +
+                ", status='" + status + '\'' +
+                ", orderItems=" + orderItems +
+                '}';
+    }
     /**
      * builder class
      */
@@ -201,6 +216,10 @@ public class Order {
         }
         public builder setOrderItems(List<Item> orderItems) {
             this.orderItems = orderItems;
+            this.totalPrice = 0.0;
+            for(Item item : orderItems){
+                this.totalPrice += item.getPrice();
+            }
             return this;
         }
         public builder setTotalPrice(double totalPrice) {

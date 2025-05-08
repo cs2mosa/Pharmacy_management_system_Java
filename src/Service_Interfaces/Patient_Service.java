@@ -37,9 +37,9 @@ abstract interface PatientServiceInterface {
     /**
      * Authenticate, then Update a specific attribute of a patient, can change Password too.
      * @param PatientName The name of the patient to be updated.
+     * @param Password The password of the patient to be updated.
      * @param query The attribute to be updated.
      * @param value The new value for the specified attribute.
-     * @param Password The password of the patient to be updated.
      * @return status code of patient id on success , and -1 else.
      */
     int UpdatePatient(String PatientName,String Password, String query, Object value);
@@ -75,6 +75,8 @@ abstract interface PatientServiceInterface {
      * Places an order with the specified items.
      * 
      * @param items A map where the key is the item name and the value is the quantity.
+     * @param PatientId The ID of the patient placing the order.
+     * @param pharmacist The pharmacist handling the order.
      * @return The ID of the placed order if placed correctly, -1 else.
      */
     int PlaceOrder(Map<String, Integer> items, int PatientId, Pharmacist pharmacist);
@@ -113,160 +115,242 @@ public class Patient_Service implements PatientServiceInterface {
         }
         return instance;
     }
-
+    //works fine
     @Override
     public int AddPatient(Patient patient) {
-        // Implementation for adding a patient
-        return Patient_Repository.getInstance().AddPatient(patient);
+        try {
+            return Patient_Repository.getInstance().AddPatient(patient);
+        } catch (Exception e) {
+            System.err.println("Error adding patient: " + e.getMessage());
+            return -1;
+        }
     }
-
+    //works fine
     @Override
     public int RemovePatient(String Patientname) {
-        // Implementation for removing a patient
-        return Patient_Repository.getInstance().RemovePatient(GetPatient(Patientname).getID());
+        try {
+            if (GetPatient(Patientname) == null)
+                return -1;
+            return Patient_Repository.getInstance().RemovePatient(GetPatient(Patientname).getID());
+        } catch (Exception e) {
+            System.err.println("Error removing patient: " + e.getMessage());
+            return -1;
+        }
     }
-
+    //works fine
     @Override
     public Patient GetPatient(String Patientname) {
-        // Implementation for retrieving a patient
-        Set<Patient> temp = Patient_Repository.getInstance().GetAllPatients();
-        Iterator<Patient> value = temp.iterator();
-        while(value.hasNext()){
-            Patient temppPatient = (Patient)value.next();
-            if(temppPatient.getUsername() == Patientname ){
-                return temppPatient;
+        try {
+            if(!(Patientname instanceof String) || Patientname == null) throw new IllegalArgumentException("patient name should be valid type of string");
+            Set<Patient> temp = Patient_Repository.getInstance().GetAllPatients();
+            if (temp == null || temp.isEmpty())
+                return null;
+            Iterator<Patient> value = temp.iterator();
+            while (value.hasNext()) {
+                Patient temppPatient = value.next();
+                if (temppPatient.getUsername().equals(Patientname)) {
+                    return temppPatient;
+                }
             }
+            return null;
+        } catch (Exception e) {
+            System.err.println("Error retrieving patient: " + e.getMessage());
+            return null;
         }
-        return null; 
     }
+    //works fine
     @Override
     public List<Patient> GetAllPatients() {
-        // Implementation for retrieving all patients
-        return new ArrayList<>(Patient_Repository.getInstance().GetAllPatients()); 
+        try {
+            return new ArrayList<>(Patient_Repository.getInstance().GetAllPatients());
+        } catch (Exception e) {
+            System.err.println("Error retrieving all patients: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
-
+    //works fine
     @Override
     public double GetPatientBalance(String PatientName) {
-        // Implementation for retrieving a patient's balance
-        return GetPatient(PatientName).GetBalance(); // Placeholder return value
+        try {
+            Patient patient = GetPatient(PatientName);
+            if (patient == null)
+                return -1;
+            return patient.GetBalance();
+        } catch (Exception e) {
+            System.err.println("Error retrieving patient balance: " + e.getMessage());
+            return -1;
+        }
     }
-
+    //works fine
     @Override
     public List<Order> GetPatientOrders(int PatientId) {
-        // Implementation for retrieving a patient's orders
-        return Patient_Repository.getInstance().GetPatient(PatientId).getOrders();
+        try {
+            Patient patient = Patient_Repository.getInstance().GetPatient(PatientId);
+            if (patient == null)
+                return null;
+            return patient.getOrders();
+        } catch (Exception e) {
+            System.err.println("Error retrieving patient orders: " + e.getMessage());
+            return null;
+        }
     }
-
+    
+    //works fine.
     @Override
-    public int UpdatePatient(String PatientName,String Password, String query, Object value) {
-        // Implementation for updating a patient
-        Patient temp =  GetPatient(PatientName);
-        if(temp == null || query == null || value == null || query.isEmpty() || value.toString().isEmpty() || !AuthenticatePatient(PatientName, Password)){ 
+    public int UpdatePatient(String PatientName, String Password, String query, Object value) throws IllegalArgumentException, IllegalStateException {
+        Patient temp = GetPatient(PatientName);
+        if (!AuthenticatePatient(PatientName, Password)) {
+            return -1; //status code for invalid authentication.
+        }
+        if(!(value instanceof Integer || value instanceof Double || value instanceof Float || value instanceof String || value instanceof Boolean))
+            throw new IllegalArgumentException("invalid value type.");//status code of invalid value type.
+        try {
+            switch (query) {
+                case "age":
+                    if (value instanceof Float) {
+                        temp.setAge((Float) value);
+                        return Patient_Repository.getInstance().UpdatePatient(temp.getID(), temp);
+                    }
+                    if (value instanceof Integer) {
+                        temp.setAge((Integer) value);
+                        return Patient_Repository.getInstance().UpdatePatient(temp.getID(), temp);
+                    }
+                    throw new IllegalArgumentException("invalid value type.");
+                case "address":
+                    if (value instanceof String) {
+                        temp.setAddress((String) value);
+                        return Patient_Repository.getInstance().UpdatePatient(temp.getID(), temp);
+                    }
+                    throw new IllegalArgumentException("invalid value type.");
+                case "PatientBalance":
+                    if (value instanceof Double) {
+                        temp.SetBalance((Double) value);
+                        return Patient_Repository.getInstance().UpdatePatient(temp.getID(), temp);
+                    }
+                    if (value instanceof Integer) {
+                        temp.SetBalance((Integer) value);
+                        return Patient_Repository.getInstance().UpdatePatient(temp.getID(), temp);
+                    }
+                    throw new IllegalArgumentException("invalid value type.");
+                case "Password":
+                    if (value instanceof String) {
+                        temp.setPassword((String) value);
+                        return Patient_Repository.getInstance().UpdatePatient(temp.getID(), temp);
+                    }
+                    throw new IllegalArgumentException("invalid value type.");
+                case "email":
+                    if (value instanceof String) {
+                        temp.setUserEmail((String) value);
+                        return Patient_Repository.getInstance().UpdatePatient(temp.getID(), temp);
+                    }
+                    throw new IllegalArgumentException("invalid value type.");
+                case "active":
+                    if (value instanceof Boolean) {
+                        temp.setactive((Boolean) value);
+                        return Patient_Repository.getInstance().UpdatePatient(temp.getID(), temp);
+                    }
+                    throw new IllegalArgumentException("invalid value type.");
+                default:
+                    throw new IllegalArgumentException("invalid value type."); //status code of invalid input type.
+            }
+        }
+        catch (NullPointerException e) {
+            //  handle exception
+            System.out.println("error updating: query cannot be null");
+            return -1;
+        } 
+        catch (Exception e) {
+            // handle exception
+            System.out.println("error updating: " + e.getMessage());
             return -1;
         }
-        switch (query) {
-            case "age":
-                if(value instanceof Float){
-                    temp.setAge((Float)value);
-                }
-                break;
-                
-            case "address":
-                if(value instanceof String){
-                    temp.setAddress((String)value);
-                }
-                break;
+        
+    }
 
-            case "PatientBalance":
-                if(value instanceof Double){
-                    temp.SetBalance((Double)value);
-                }
-                break;
-
-            case "Password":
-                if(value instanceof String){
-                    temp.setPassword((String)value);
-                }
-                break;
-            
-            case "email":
-                if(value instanceof String){
-                    temp.setUserEmail((String)value);
-                }
-                break;
-
-            case "active":
-                if(value instanceof Boolean){
-                    temp.setactive((Boolean)value);
-                }
-                break;
-
-            default:
-                return -1;
+    //checked, works right 
+    @Override
+    public boolean AuthenticatePatient(String PatientName, String Password) {
+        try {
+            Patient patient = GetPatient(PatientName);
+            if (patient == null) {
+                throw new IllegalArgumentException("Patient not found.");
+            }
+            if (Password == null || patient.getPassword() == null) {
+                throw new IllegalArgumentException("Password cannot be null.");
+            }
+            return patient.getPassword().equals(Password);
+        } catch (Exception e) {
+            System.err.println("Authentication failed: " + e.getMessage());
+            return false;
         }
-        Patient_Repository.getInstance().UpdatePatient(temp.getID(), temp);
-        return temp.getID();
     }
 
+    //checked , works fine.
     @Override
-    public boolean AuthenticatePatient(String PatientName, String Password){
-        //implementation  here.
-        return GetPatient(PatientName).getPassword().equals(Password);
-    }
-
-    @Override
-    public int PlaceOrderByPrescription(int PatientId, int PreID){
-        //implementation here.
-        Prescription temp1 = Prescription_Service.getInstance().getPreById(PreID);
-        Patient temp2 = Patient_Repository.getInstance().GetPatient(PatientId);
-        if(temp1 != null && temp2 != null){
+    public int PlaceOrderByPrescription(int PatientId, int PreID) {
+        try {
+            Prescription temp1 = Prescription_Service.getInstance().getPreById(PreID);
+            Patient temp2 = Patient_Repository.getInstance().GetPatient(PatientId);
+            if (temp2 == null )throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
+            if (temp1 == null )throw new IllegalArgumentException("Prescription not found, you should add Prescription first or check the id");
+            if(temp1.getItems() ==null) throw new IllegalArgumentException("Prescription has no items, failed to fetch items");
             Order order = new Order.builder()
-                            .setOrderItems(new ArrayList<>(temp1.getItems()))
-                            .setOrderId(new Random().nextInt(50000))
-                            .setStatus("Pending")
-                            .build();
-            if(Order_Repository.getInstance().AddOrder(PatientId, order) > 0){
+                    .setOrderItems(new ArrayList<>(temp1.getItems()))
+                    .setOrderId(new Random().nextInt(50000))
+                    .setStatus("Pending")
+                    .build();
+            if (Order_Service.getInstance().AddOrder(PatientId, order) > 0) {
                 temp2.Add_order(order);
+                System.out.println("order added");
             }
             return order.getOrderId();
+        } catch (Exception e) {
+            System.err.println("Error placing order by prescription: " + e.getMessage());
+            return -1;
         }
-        return -1;
     }
-
+    //works fine.
     @Override
-    public int PlaceOrder(Map<String, Integer> items, int PatientId, Pharmacist pharmacist){
-        Iterator <Map.Entry<String,Integer>> it = items.entrySet().iterator();
-        List<Item> tempitems = new ArrayList<>();
-        Patient tempel = Patient_Repository.getInstance().GetPatient(PatientId);
-        if(tempel == null)
-            return -1;
-        if(pharmacist == null)
-            return -1;
-        if(items == null || items.isEmpty())
-            return -1;
-        while(it.hasNext()){
-            Map.Entry<String,Integer> temp = it.next();
-            Item tempitem = Inventory_service.getInstance().GetItemByName(temp.getKey());
-            if(tempitem == null)
-                return -1;
-            if(tempitem.getQuantity() < temp.getValue())
-                return -1;
-            if(pharmacist.is_safe(tempitem, tempel) == false)
-                return -1;
+    public int PlaceOrder(Map<String, Integer> items, int PatientId, Pharmacist pharmacist) {
+        try {
+            List<Item> tempitems = new ArrayList<>();
+            Patient tempel = Patient_Repository.getInstance().GetPatient(PatientId);
+            if (tempel == null)
+                throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
+            if (pharmacist == null)
+                throw new IllegalArgumentException("Pharmacist not found, you should add Pharmacist first or check the id");
+            if (items == null || items.isEmpty())
+                throw new IllegalArgumentException("no items has been found, failed to place the order");
+            Iterator<Map.Entry<String, Integer>> it = items.entrySet().iterator();
 
-            tempitems.add(tempitem);
-            Inventory_service.getInstance().updateStock(tempitem.getMedicName(), tempitem.getQuantity() - temp.getValue());
-        }
-        Order order =new Order.builder()
-                              .setOrderId(new Random().nextInt(50000))
-                              .setStatus("Pending")
-                              .setOrderItems(tempitems)
-                              .build();
+            while (it.hasNext()) {
+                Map.Entry<String, Integer> temp = it.next();
+                Item tempitem = Inventory_service.getInstance().GetItemByName(temp.getKey());
+                System.out.println();
+                if (tempitem == null)
+                    throw new IllegalArgumentException("item "+ temp.getKey() +" has not been found, failed to place the order");
+                if (tempitem.getQuantity() < temp.getValue())
+                    throw new IllegalArgumentException("item has no sufficient quantity");
+                if (!pharmacist.is_safe(tempitem, tempel))
+                    throw new IllegalArgumentException("item "+ temp.getKey() +" is not safe for the patient");
+                
+                tempitems.add(tempitem);
+                Inventory_service.getInstance().updateStock(tempitem.getMedicName(), tempitem.getQuantity() - temp.getValue());
+            }
+            Order order = new Order.builder()
+                    .setOrderId(new Random().nextInt(50000))
+                    .setStatus("Pending")
+                    .setOrderItems(tempitems)
+                    .build();
 
-        if(Order_Repository.getInstance().AddOrder(PatientId, order) > 0  && Prescription_Service.getInstance().IssuePrescription(pharmacist,PatientId,order.getOrderId()) > 0){
-            tempel.Add_order(order);
-            return order.getOrderId();
-        }else{
+            if (Order_Repository.getInstance().AddOrder(PatientId, order) > 0 && Prescription_Service.getInstance().IssuePrescription(pharmacist, PatientId, order.getOrderId()) > 0) {
+                tempel.Add_order(order);
+                return order.getOrderId();
+            } else {
+                return -1;
+            }
+        } catch (Exception e) {
+            System.err.println("Error placing order: " + e.getMessage());
             return -1;
         }
     }

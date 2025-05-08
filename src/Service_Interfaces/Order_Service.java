@@ -12,10 +12,17 @@ import Class_model.Item;
 abstract interface OrderServiceInterface {
 
     /**
+     * Adds a new order to the repository.
+     * @param order The order to be added.
+     * @return order id on success , -1 else.
+     */
+    int AddOrder(int patientId, Order order); // Adds an order to the repository.
+
+    /**
      * Deletes an order by its ID.
      * @param patientId The ID of the patient associated with the order.
      * @param orderId The ID of the order to be deleted.
-     * @return 0 on success, -1 if order not found.
+     * @return 0 on success, -1 if order already not found.
      */
     int DeleteOrder(int patientId,int orderId); // can be void
 
@@ -81,29 +88,55 @@ public class Order_Service implements OrderServiceInterface {
         return instance;
     }
 
+    //works fine
+    @Override
+    public int AddOrder(int patientId, Order order) {
+        // Implementation for adding an order
+        if(order == null) return -1;
+        try {
+            return Order_Repository.getInstance().AddOrder(patientId, order);
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("error adding :" + e.getMessage());
+            return -1;
+        }
+    }
 
+    //works fine. 
     @Override
     public int DeleteOrder(int patientId,int orderId){
         // Implementation for deleting an order
-        return Order_Repository.getInstance().DeleteOrder(patientId, orderId);
+        try {
+            return Order_Repository.getInstance().DeleteOrder(patientId, orderId);
+        } catch (Exception e) {
+            // handle exception
+            System.out.println("error deleting :" + e.getMessage());
+            return -1;
+        }
     }
 
+    //works fine
     @Override
     public int UpdateOrderItems(int orderId, boolean query, Item item) {
         // Implementation for updating order items
         if(Order_Repository.getInstance().GetById(orderId) == null) 
-            return -1; // Order not found
+            throw new IllegalArgumentException("order not found, you should add order first or check the id");  // Order not found
         if(item == null) 
-            return -1; // Item not found
+            throw new IllegalArgumentException("item cannot be null"); // Item not found
         if(query){
             GetById(orderId).addItem(item);
             return orderId; // 0 for adding
         }else{
-            GetById(orderId).removeItem(item);
-            return orderId; // 1 for removing
+            if(item.is_Refundable()){
+                GetById(orderId).removeItem(item);
+                return orderId;
+            } else{
+                return -1;
+            }
         }
     }
 
+    //works fine checking again
     @Override
     public Order GetById(int orderId) {
         // Implementation for retrieving an order by ID
@@ -111,13 +144,21 @@ public class Order_Service implements OrderServiceInterface {
         return Order_Repository.getInstance().GetById(orderId);
     }
 
+    //works fine
     @Override
     public List<Order> GetByCustomer(String CustomerName) {
         // Implementation for retrieving orders by customer name
         // other functionalities to be added here.
-        return Order_Repository.getInstance().GetByName(CustomerName);
+        try {
+            return Order_Repository.getInstance().GetByName(CustomerName);
+        } catch (Exception e) {
+            //  handle exception
+            System.out.println("error retriving orders: " + e.getMessage());
+            return null;
+        }
     }
 
+    //works fine
     @Override
     public long CalcTotalIncome() {
         // Implementation for calculating total income from orders
@@ -130,22 +171,23 @@ public class Order_Service implements OrderServiceInterface {
         return x; 
     }
 
+    //works fine
     @Override
     public int HandleReturn(int orderId, String ItemName){
         // Implementation for handling item returns
         Order order = Order_Repository.getInstance().GetById(orderId);
-        if(order != null && Inventory_service.getInstance().GetItemByName(ItemName) != null){
-            for(Item item : order.getOrderItems()){
-                if(item.getMedicName() == ItemName){
-                    order.removeItem(item);
-                    break;
-                }
+        if(order == null) return -1;
+        if(Inventory_service.getInstance().GetItemByName(ItemName) == null) return -1;
+        for(Item item : order.getOrderItems()){
+            if(item == null) return -1;
+            if(item.getMedicName() == ItemName){
+                order.removeItem(item);
+                break;
             }
-            order.setStatus("Returned");
-            order.setTotalPrice(order.getTotalPrice() - Inventory_service.getInstance().GetItemByName(ItemName).getPrice());
-            return orderId; // success
-        }else{
-            return -1;
         }
+        order.setStatus("Returned" + ItemName);
+        order.setTotalPrice(order.getTotalPrice() - Inventory_service.getInstance().GetItemByName(ItemName).getPrice());
+        return orderId; // success
+    
     }
 }

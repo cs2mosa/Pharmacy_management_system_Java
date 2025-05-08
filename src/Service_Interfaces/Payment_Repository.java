@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import Class_model.*;
 
@@ -86,13 +85,16 @@ class Payment_Repository implements PaymentRepository {
         }
     }
 
+    //works fine
     @Override
     public int AddPayment(int PatientId, Payment payment) {
         // Implementation to add a payment
-        // Check if the payment already exists in the repository
-        if (payment == null) return -1;
+        if (payment == null ||! (payment instanceof Payment)) throw new IllegalArgumentException("payment should be of type Payment");
+        if(Order_Service.getInstance().GetById(payment.getID()) == null) throw new IllegalArgumentException("Order not found, you should add order first or check the id");
+        //if(Patient_Repository.getInstance().GetPatient(PatientId) == null) throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
         if(PAYMENTS.containsKey(PatientId)){
             List<Payment> payments = PAYMENTS.get(PatientId);
+            if(payments == null) return -1;
             for(Payment p : payments){
                 if(p.getID() == payment.getID()){
                     return -1; // Payment already exists, return -1
@@ -105,14 +107,18 @@ class Payment_Repository implements PaymentRepository {
             PAYMENTS.put(PatientId, payments);
         }
         // Set the payment ID and status
-        payment.setID(new Random().nextInt(50000)); // Generate a random ID for the payment
         payment.setStatus("Pending");
         return payment.getID();
     }
 
+    //works fine.
     @Override
     public int DeletePayment(int PatientId, int PaymentId) {
         // Implementation to withdraw a payment by ID
+        if (Patient_Repository.getInstance().GetPatient(PatientId) == null)
+            //throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
+        if(Payment_Repository.GetInstance().GetById(PatientId) == null)
+            return -1;
         if(PAYMENTS.containsKey(PatientId)){
             List<Payment> payments =  PAYMENTS.get(PatientId);
             payments.removeIf(payment -> payment.getID() == PaymentId);
@@ -123,6 +129,7 @@ class Payment_Repository implements PaymentRepository {
         }
     }
 
+    //works fine
     @Override
     public int UpdatePayment(int PatientId, Payment Newpayment) {
         // Implementation to update payment details
@@ -130,12 +137,14 @@ class Payment_Repository implements PaymentRepository {
         return AddPayment(PatientId, Newpayment);
     }
 
+    //not used
     @Override
     public List<Payment> GetById(int PatientId) {
         // Implementation to get a payment by ID
         return PAYMENTS.get(PatientId); 
     }
 
+    //not used
     @Override  
     public List<Payment> GetAllPayments() {
         // Implementation to get all payments
@@ -146,6 +155,7 @@ class Payment_Repository implements PaymentRepository {
         return allPayments;
     }
 
+    //works fine
     @Override
     public Payment GetPayment(int PaymentId) {
         // Implementation to get a payment by ID
