@@ -72,7 +72,7 @@ abstract interface PatientServiceInterface {
     List<Order> GetPatientOrders(int PatientId);
 
     /**
-     * Places an order with the specified items.
+     * Places an order with the specified items, issues a new prescription to that order.
      * 
      * @param items A map where the key is the item name and the value is the quantity.
      * @param PatientId The ID of the patient placing the order.
@@ -90,7 +90,8 @@ abstract interface PatientServiceInterface {
     boolean AuthenticatePatient(String PatientName, String Password);
 
     /**
-     * Places an order based on a prescription.
+     * Places an order based on a prescription. you should validate the prescription first as this method doesnt hande invalid presciptions
+     * @see CheckPrescriptionValidity for more details.
      * @param PatientId The ID of the patient placing the order.
      * @param PreID The ID of the prescription.
      * @return The ID of the placed order if placed correctly, -1 else.

@@ -63,7 +63,7 @@ abstract interface PrescriptionServiceInterface {
     int FillPrescription(int preID);
 
     /**
-     * Issues a prescription to a patient, associating it with a pharmacist.
+     * Issues a new prescription to a patient, associating it with a pharmacist.
      * @param pharmacist The pharmacist who is issuing the prescription.
      * @param patientId The ID of the patient to whom the prescription is issued.
      * @param PreID The ID of the prescription being issued.
@@ -213,7 +213,7 @@ public class Prescription_Service implements PrescriptionServiceInterface {
             }
 
         } catch (Exception e) {
-            // TODO: handle exception
+            // handle exception
             System.out.println("Error in filling prescription: " + e.getMessage());
             return -1; // Return -1 to indicate failure
         }
@@ -261,7 +261,7 @@ public class Prescription_Service implements PrescriptionServiceInterface {
             }
             return true; // Return true to indicate valid prescription.
         } catch (Exception e) {
-            // TODO: handle exception
+            //handle exception
             System.out.println("Error in checking prescription validity: " + e.getMessage());
             return false; // Return false to indicate failure
         }
