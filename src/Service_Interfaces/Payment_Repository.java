@@ -116,7 +116,7 @@ class Payment_Repository implements PaymentRepository {
     public int DeletePayment(int PatientId, int PaymentId) {
         // Implementation to withdraw a payment by ID
         if (Patient_Repository.getInstance().GetPatient(PatientId) == null)
-            //throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
+            throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
         if(Payment_Repository.GetInstance().GetById(PatientId) == null)
             return -1;
         if(PAYMENTS.containsKey(PatientId)){
