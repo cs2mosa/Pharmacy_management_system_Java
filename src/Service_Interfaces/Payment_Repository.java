@@ -91,7 +91,7 @@ class Payment_Repository implements PaymentRepository {
         // Implementation to add a payment
         if (payment == null ||! (payment instanceof Payment)) throw new IllegalArgumentException("payment should be of type Payment");
         if(Order_Service.getInstance().GetById(payment.getID()) == null) throw new IllegalArgumentException("Order not found, you should add order first or check the id");
-        //if(Patient_Repository.getInstance().GetPatient(PatientId) == null) throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
+        if(Patient_Repository.getInstance().GetPatient(PatientId) == null) throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
         if(PAYMENTS.containsKey(PatientId)){
             List<Payment> payments = PAYMENTS.get(PatientId);
             if(payments == null) return -1;
