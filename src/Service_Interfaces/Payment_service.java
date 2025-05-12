@@ -2,6 +2,8 @@ package Service_Interfaces;
 
 import Class_model.*;
 
+import java.util.List;
+
 /**
  * The PaymentServiceInterface defines the contract for payment processing services.
  * It includes methods for processing payments and generating receipts.
@@ -9,11 +11,11 @@ import Class_model.*;
  *       withdrawal is differnt from deletion in Payment_Repository.
  * NOTE : Payment Id should be the same as Order Id.
  */
-abstract interface PaymentServiceInterface {
+interface PaymentServiceInterface {
 
     /**
      * Adds a new payment to the repository.
-     * 
+     * @param PatientId The unique identifier of the patient associated with the payment.
      * @param payment The Payment object to be added.
      * @return payment id on success, -1 else.
      */
@@ -164,6 +166,10 @@ public class Payment_service implements PaymentServiceInterface{
         else{
             return -1;
         }
+    }
+    public List<Payment> GetById(int PatientId) {
+        // Implementation to get a payment by ID
+        return Payment_Repository.GetInstance().GetById(PatientId);
     }
 }
 

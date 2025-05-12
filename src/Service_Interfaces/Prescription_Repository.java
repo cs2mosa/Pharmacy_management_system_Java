@@ -11,7 +11,7 @@ import Class_model.*;
  * PrescriptionRepository is an interface that defines the contract for managing prescriptions.
  * It provides methods to add, delete, and retrieve prescriptions based on specific criteria.
  */
-abstract interface PrescriptionRepository {
+interface PrescriptionRepository {
 
     /**
      * Adds a new prescription to the repository.
@@ -24,17 +24,18 @@ abstract interface PrescriptionRepository {
 
     /**
      * Deletes a prescription from the repository based on its unique ID.
-     * @param ID The unique identifier of the prescription to be deleted.
+     * @param userId The ID of the user associated with the prescription.
+     * @param PreID The unique identifier of the prescription to be deleted.
      * @return status code of 0 on success , -1 else.
      * @throws IllegalArgumentException if the prescription ID is invalid or if the user ID is invalid.
      */
-    int Delete(int userId, int ID) throws IllegalArgumentException;
+    int Delete(int userId, int PreID) throws IllegalArgumentException;
 
     /**
-     * Finds and retrieves a list of prescriptions associated with a specific patient's name.
-     * @param patientName The name of the patient whose prescriptions are to be retrieved.
-     * @return A list of prescriptions matching the given patient name. or null if not found.
-     * @throws IllegalArgumentException if the patient name is null or empty.
+     * Finds and retrieves a list of prescriptions associated with a specific patient's ID.
+     * @param patientId The ID of the patient whose prescriptions are to be retrieved.
+     * @return A list of prescriptions matching the given patient ID. or null if not found.
+     * @throws IllegalArgumentException if the patient ID is null or empty.
      */
     List<Prescription> findByPatientID(int patientId) throws IllegalArgumentException;
 
@@ -68,11 +69,8 @@ class Prescription_Repository implements PrescriptionRepository {
     public static Prescription_Repository GetInstance(){
         if (instance == null) {
             instance = new Prescription_Repository();
-            return instance;
         }
-        else{
-            return instance;
-        }
+        return instance;
     }
     //works fine
     @Override

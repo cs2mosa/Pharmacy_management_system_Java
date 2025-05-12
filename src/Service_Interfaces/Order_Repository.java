@@ -14,11 +14,12 @@ import Class_model.Patient;
  * accessing order history.
  * when creating Orders, User should be infromed with quantity of Items, and preveted from adding a non existed Item.
  */
-abstract interface OrderRepository {
+interface OrderRepository {
 
     /**
      * Adds a new order to the repository.
      * @param order The order to be added.
+     * @param patientId The ID of the patient associated with the order.
      * @return order id on success , -1 else.
      * @throws IllegalArgumentException if the order is null or invalid.
      */

@@ -9,10 +9,11 @@ import Class_model.Item;
  * This interface defines the contract for order-related operations.
  * It provides methods for placing, deleting, updating, retrieving, and calculating orders.
  */
-abstract interface OrderServiceInterface {
+interface OrderServiceInterface {
 
     /**
      * Adds a new order to the repository.
+     * @param patientId the patient id to whom the order will be attached to.
      * @param order The order to be added.
      * @return order id on success , -1 else.
      */
@@ -63,8 +64,7 @@ abstract interface OrderServiceInterface {
      * Handles the return of an item.
      * 
      * @param orderId The ID of the order containing the item to be returned.
-     * @param itemName The Name of the item to be returned.
-     * @param reason The reason for the return.
+     * @param ItemName The Name of the item to be returned.
      * @return order id on success, -1 if order or item not found.
      */
     int HandleReturn(int orderId, String ItemName);

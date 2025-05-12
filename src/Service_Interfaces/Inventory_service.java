@@ -3,12 +3,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Class_model.Item;
-import Class_model.Admin;
+//import Class_model.Admin;
 /**
  * InventoryServiceInterface defines the contract for managing inventory operations.
  * It provides methods to add, remove, update, and retrieve items, as well as manage stock levels.
  */
-abstract interface InventoryServiceInterface {
+interface InventoryServiceInterface {
 
     /**
      * Adds a new item to the inventory.
@@ -61,10 +61,16 @@ abstract interface InventoryServiceInterface {
     List<String> getLowStockItems();
 
     /**
+     * //void RemoveExpiredItems(); //to be added later.
      * Retrieves a list of items that have expired.
      * @return A list of expired items.
      */
-    //void RemoveExpiredItems(); to be added later.
+
+    /**
+     * Retrieves all items from the repository.
+     * @return A list of all items.
+     */
+    List<Item> GetAllItems();
 }
 
 public class Inventory_service implements InventoryServiceInterface{
@@ -87,7 +93,7 @@ public class Inventory_service implements InventoryServiceInterface{
     //works fine
     @Override
     public int AddNewItem(Item item){
-        if(Admin.authorizeItem(item) && Items_Repository.GetInstance().GetItemByName(item.getMedicName()) == null){
+        if(/*Admin.authorizeItem(item) &&*/ Items_Repository.GetInstance().GetItemByName(item.getMedicName()) == null){
             Items_Repository.GetInstance().AddNewItem(item);
             return 0;
         }
@@ -118,6 +124,7 @@ public class Inventory_service implements InventoryServiceInterface{
     @Override
     public Item GetItemByName(String ItemName){
         //other functionalities to be added here.
+        if(ItemName == null) return null;
         return Items_Repository.GetInstance().GetItemByName(ItemName);
     }
 
@@ -157,5 +164,10 @@ public class Inventory_service implements InventoryServiceInterface{
         }else{
             return null; // No items in the inventory.
         }
+    }
+
+    @Override
+    public List<Item> GetAllItems(){
+        return Items_Repository.GetInstance().GetAllItems();
     }
 }

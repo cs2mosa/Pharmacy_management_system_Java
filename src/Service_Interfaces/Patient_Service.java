@@ -18,7 +18,7 @@ import Class_model.Order;
  * It provides methods to add, remove, update, and retrieve patient information,
  * as well as manage patient balances and orders.
  */
-abstract interface PatientServiceInterface {
+interface PatientServiceInterface {
 
     /**
      * Adds a new patient to the system.
@@ -90,8 +90,8 @@ abstract interface PatientServiceInterface {
     boolean AuthenticatePatient(String PatientName, String Password);
 
     /**
-     * Places an order based on a prescription. you should validate the prescription first as this method doesnt hande invalid presciptions
-     * @see CheckPrescriptionValidity for more details.
+     * Places an order based on a prescription. you should validate the prescription first as this method doesnt handle invalid prescriptions
+     * @see Prescription_Service for more details Checking validity.
      * @param PatientId The ID of the patient placing the order.
      * @param PreID The ID of the prescription.
      * @return The ID of the placed order if placed correctly, -1 else.
@@ -110,7 +110,7 @@ public class Patient_Service implements PatientServiceInterface {
         // private constructor to prevent instantiation
     }
 
-    public static synchronized Patient_Service getInstance() {
+    public static  Patient_Service getInstance() {
         if (instance == null) {
             instance = new Patient_Service();
         }
@@ -142,7 +142,7 @@ public class Patient_Service implements PatientServiceInterface {
     @Override
     public Patient GetPatient(String Patientname) {
         try {
-            if(!(Patientname instanceof String) || Patientname == null) throw new IllegalArgumentException("patient name should be valid type of string");
+            if( Patientname == null) throw new IllegalArgumentException("patient name should be valid type of string");
             Set<Patient> temp = Patient_Repository.getInstance().GetAllPatients();
             if (temp == null || temp.isEmpty())
                 return null;
@@ -286,25 +286,35 @@ public class Patient_Service implements PatientServiceInterface {
         }
     }
 
-    //checked , works fine.
+    //checked , works fine./* should be tested*/
     @Override
     public int PlaceOrderByPrescription(int PatientId, int PreID) {
         try {
             Prescription temp1 = Prescription_Service.getInstance().getPreById(PreID);
             Patient temp2 = Patient_Repository.getInstance().GetPatient(PatientId);
+            System.out.println("here is fine");
             if (temp2 == null )throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
             if (temp1 == null )throw new IllegalArgumentException("Prescription not found, you should add Prescription first or check the id");
             if(temp1.getItems() ==null) throw new IllegalArgumentException("Prescription has no items, failed to fetch items");
             Order order = new Order.builder()
                     .setOrderItems(new ArrayList<>(temp1.getItems()))
-                    .setOrderId(new Random().nextInt(50000))
+                    .setOrderId(PreID)
                     .setStatus("Pending")
                     .build();
+            /* should be tested*/
+            for(Item item : order.getOrderItems()) {
+                if(Inventory_service.getInstance().GetItemByName(item.getMedicName()) == null) throw new IllegalArgumentException("item "+ item.getMedicName() +" has not been found, failed to place the order");
+                if(Inventory_service.getInstance().GetItemByName(item.getMedicName()).getQuantity() < item.getQuantity()) throw new IllegalArgumentException("item has no sufficient quantity");
+                Inventory_service.getInstance().updateStock(item.getMedicName(),  Inventory_service.getInstance().GetItemByName(item.getMedicName()).getQuantity() - item.getQuantity());
+            }
             if (Order_Service.getInstance().AddOrder(PatientId, order) > 0) {
                 temp2.Add_order(order);
                 System.out.println("order added");
+                return order.getOrderId();
+            }else{ 
+                return -1;
             }
-            return order.getOrderId();
+           
         } catch (Exception e) {
             System.err.println("Error placing order by prescription: " + e.getMessage());
             return -1;

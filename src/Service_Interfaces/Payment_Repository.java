@@ -12,10 +12,11 @@ import Class_model.*;
  * It provides methods to add, withdraw, update, and retrieve payment details.
  * NOTE : Payment Id should be the same as Order Id.
  */
-abstract interface PaymentRepository {
+interface PaymentRepository {
 
     /**
      * Adds a new payment to the repository.
+     * @param PatientId The unique identifier of the patient associated with the payment.
      * @param payment The Payment object to be added.
      * @return payment id on successs, -1 else
      */
@@ -77,19 +78,17 @@ class Payment_Repository implements PaymentRepository {
     // Method to get the singleton instance of Payment_Repository
     public static PaymentRepository GetInstance(){
         if(instance ==null){
-            instance  =  new Payment_Repository();
-            return instance;
+            instance  =  new Payment_Repository();  
         }
-        else{
-            return instance;
-        }
+        return instance;
+        
     }
 
     //works fine
     @Override
     public int AddPayment(int PatientId, Payment payment) {
         // Implementation to add a payment
-        if (payment == null ||! (payment instanceof Payment)) throw new IllegalArgumentException("payment should be of type Payment");
+        if (payment == null ) throw new IllegalArgumentException("payment should be of type Payment");
         if(Order_Service.getInstance().GetById(payment.getID()) == null) throw new IllegalArgumentException("Order not found, you should add order first or check the id");
         if(Patient_Repository.getInstance().GetPatient(PatientId) == null) throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
         if(PAYMENTS.containsKey(PatientId)){

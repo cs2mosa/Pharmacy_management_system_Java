@@ -10,7 +10,7 @@ import Class_model.User;
  * UserRepository is an interface that defines the contract for managing User entities.
  * It provides methods to add, update, delete, and retrieve users by their username or ID.
  */
-abstract interface UserRepository {
+interface UserRepository {
 
     /**
      * Adds a new user to the repository.
@@ -65,10 +65,9 @@ class User_Repository implements UserRepository {
     public static User_Repository GetInstance(){
         if (instance == null) {
             instance = new User_Repository();
-            return instance;
-        } else {
-            return instance;
-        }
+        } 
+        return instance;
+        
     }
 
     @Override

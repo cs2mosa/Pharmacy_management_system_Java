@@ -117,7 +117,7 @@ public class Order {
         this.orderItems = orderItems;
         this.totalPrice = 0.0;
         for(Item item : orderItems){
-            this.totalPrice += item.getPrice();
+            this.totalPrice += item.getPrice() * item.getQuantity();
         }
     }
 
@@ -218,7 +218,7 @@ public class Order {
             this.orderItems = orderItems;
             this.totalPrice = 0.0;
             for(Item item : orderItems){
-                this.totalPrice += item.getPrice();
+                this.totalPrice += item.getPrice() * item.getQuantity();
             }
             return this;
         }

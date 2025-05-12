@@ -15,7 +15,7 @@ import Class_model.Item;
  * It provides methods to add, remove, update, and retrieve items, as well as query items by category
  * and get the total number of items.
  */
-abstract interface ItemsRepository {
+interface ItemsRepository {
     
     /**
      * retrives item based on its name.
@@ -37,9 +37,8 @@ abstract interface ItemsRepository {
 
     /**
      * Updates an existing item in the repository based on a query and a new value.
-     * @param item The item to be updated.
-     * @param query The query specifying the field to be updated.
-     * @param value The new value to be set for the specified field.
+     * @param itemName The name of the item to be updated.
+     * @param newItem The new item to replace the old item.
      */
     void UpdateItem(String itemName, Item newItem);
 
@@ -79,11 +78,8 @@ class Items_Repository implements ItemsRepository{
     public static Items_Repository GetInstance(){
         if(instance == null){
             instance = new Items_Repository();
-            return instance;
         }
-        else{
-            return instance;
-        }
+        return instance;
     }
 
     @Override
@@ -128,6 +124,7 @@ class Items_Repository implements ItemsRepository{
     @Override
     public List<Item> GetItemsByCategory(String category){
         List<Item> templist = new ArrayList<>();
+        if(ITEMS.isEmpty())return new ArrayList<>();
         for(Item itm : ITEMS){
             if(itm.getCategory() == category){
                 templist.add(itm);

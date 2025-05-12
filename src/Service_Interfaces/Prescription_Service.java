@@ -3,16 +3,15 @@ package Service_Interfaces;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import Class_model.*;
 
 /**
  * This interface defines the contract for managing prescriptions in the system.
- * It provides methods for adding, deleting, updating, retrieving, and filling prescriptions.
+ * It provides methods for adding, deleting, updating, retrieving, and filling prescriptions.and others
  */
-abstract interface PrescriptionServiceInterface {
+interface PrescriptionServiceInterface {
 
     /**
      * Adds a new prescription to the system.
@@ -43,7 +42,7 @@ abstract interface PrescriptionServiceInterface {
     /**
      * Retrieves a list of prescriptions associated with a specific patient ID.
      * 
-     * @param PatientId The ID of the patient whose prescriptions are to be retrieved.
+     * @param patientName The ID of the patient whose prescriptions are to be retrieved.
      * @return A list of Prescription objects for the specified patient.
      */
     List<Prescription> GetPrescriptionsByName(String patientName);
@@ -63,10 +62,9 @@ abstract interface PrescriptionServiceInterface {
     int FillPrescription(int preID);
 
     /**
-     * Issues a new prescription to a patient, associating it with a pharmacist.
+     * Issues a new prescription to a patient, it's ID is OrderId, associating it with a pharmacist.
      * @param pharmacist The pharmacist who is issuing the prescription.
      * @param patientId The ID of the patient to whom the prescription is issued.
-     * @param PreID The ID of the prescription being issued.
      * @param OrderId The ID of the order associated with the prescription.
      * @return The ID of the issued prescription. -1 else.
      */
@@ -77,7 +75,7 @@ abstract interface PrescriptionServiceInterface {
      * @param preID The unique identifier of the prescription to be retrieved.
      * @return The Prescription object corresponding to the given ID, or null if not found.
      */
-    public Prescription getPreById(int preID);
+     Prescription getPreById(int preID);
 
     /**
      * Checks the validity of a prescription.
@@ -100,11 +98,9 @@ public class Prescription_Service implements PrescriptionServiceInterface {
     }
     public static Prescription_Service getInstance(){
         if(instance == null){
-            return new Prescription_Service();
+            instance = new Prescription_Service();
         }
-        else{
-            return instance;
-        }
+        return instance;
     }
 
     //works fine
@@ -235,7 +231,7 @@ public class Prescription_Service implements PrescriptionServiceInterface {
                     return -1;
                 }
             }
-            Prescription prescription = new Prescription(new Random().nextInt(50000),tempPatient.getUsername(), pharmacist, orderItems);
+            Prescription prescription = new Prescription(OrderId, tempPatient.getUsername(), pharmacist, orderItems);
             prescription.setStatus("Issued");
             return AddPrescription(patientId,prescription);
         } catch (Exception e) {
