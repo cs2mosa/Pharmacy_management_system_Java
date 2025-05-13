@@ -25,12 +25,13 @@ public final class Role {
     private String Description;
 
     /**
-     * Constructs a Role with the specified ID, name, permissions level, and description.
+     * Constructs a Role with the specified ID, name, permissions level, and
+     * description.
      * 
-     * @param ID              Unique identifier for the role.
-     * @param RoleName        Name of the role.
+     * @param ID               Unique identifier for the role.
+     * @param RoleName         Name of the role.
      * @param PermissionsLevel Permissions level associated with the role.
-     * @param Description     Description of the role.
+     * @param Description      Description of the role.
      */
     public Role(String ID, String RoleName, int PermissionsLevel, String Description) {
         this.Description = Description;
@@ -115,17 +116,16 @@ public final class Role {
      * Compares this role to another object for equality based on permissions level.
      * 
      * @param obj The object to compare with.
-     * @return True if the permissions level matches and the object is a Role, false otherwise.
+     * @return True if the permissions level matches and the object is a Role, false
+     *         otherwise.
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
+        if (obj instanceof Role) {
             Role role = (Role) obj;
             return (PermissionsLevel == role.PermissionsLevel);
-        } else if (obj == null || this.getClass() != obj.getClass()) {
-            return false;
-        } else {
-            return false;
         }
+        return false;
     }
+
 }

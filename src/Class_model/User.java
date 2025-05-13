@@ -7,7 +7,7 @@ import java.util.Set;
  * Abstract class representing a User with attributes and roles.
  */
 public abstract class User {
-     /**
+    /**
      * The ID of the user.
      */
     private static int UserId;
@@ -44,13 +44,13 @@ public abstract class User {
     /**
      * Constructor to initialize a User object with the given attributes.
      * 
-     * @param Username   The username of the user.
-     * @param Password   The password of the user.
-     * @param User_Email The email address of the user.
+     * @param Username    The username of the user.
+     * @param Password    The password of the user.
+     * @param User_Email  The email address of the user.
      * @param PhoneNumber The phone number of the user.
-     * @param Roles      The set of roles assigned to the user.
+     * @param Roles       The set of roles assigned to the user.
      */
-    public User(int UserId,String Username, String Password, String User_Email, String PhoneNumber, Set<Role> Roles) {
+    public User(int UserId, String Username, String Password, String User_Email, String PhoneNumber, Set<Role> Roles) {
         User.UserId = UserId;
         this.Username = Username;
         this.Password = Password;
@@ -59,13 +59,15 @@ public abstract class User {
         this.PhoneNumber = PhoneNumber;
         isActive = true;
     }
-    public User(){
+
+    public User() {
         this.Username = " ";
         this.Password = " ";
         this.UserEmail = " ";
         this.PhoneNumber = " ";
         isActive = true;
     }
+
     /**
      * Sets the id of the user.
      * 
@@ -162,7 +164,8 @@ public abstract class User {
      * @return A string containing user details.
      */
     public String toString() {
-        return "UserID: " + Username + "\nPassword: " + Password + "\nUserEmail: " + UserEmail + "\nPhoneNumber: " + PhoneNumber;
+        return "UserID: " + Username + "\nPassword: " + Password + "\nUserEmail: " + UserEmail + "\nPhoneNumber: "
+                + PhoneNumber;
     }
 
     /**
@@ -226,5 +229,15 @@ public abstract class User {
      */
     public boolean getactive() {
         return isActive;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof User) {
+            return this.Username.equals(((User) obj).Username) && this.Password.equals(((User) obj).Password)
+                    && this.UserEmail.equals(((User) obj).UserEmail)
+                    && this.PhoneNumber.equals(((User) obj).PhoneNumber);
+        }
+        return false;
     }
 }

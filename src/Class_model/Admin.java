@@ -19,7 +19,7 @@
  * - Consider implementing additional security measures to prevent unauthorized access to this method.
  * @author Mosa Abdulaziz
  * @version 1.2
- */ 
+ */
 package Class_model;
 
 import java.util.HashSet;
@@ -29,56 +29,60 @@ import java.util.HashSet;
  */
 import java.util.Set;
 
-public class Admin extends User{
+public class Admin extends User {
     private static Set<String> validCats = new HashSet<>();
     private static double totalIncome;
 
-    private Admin(int UserId,String Username, String Password, String User_Email, String PhoneNumber, Set<Role> Roles) {
-        super(UserId,Username, Password, User_Email, PhoneNumber,Roles);
+    private Admin(int UserId, String Username, String Password, String User_Email, String PhoneNumber,
+            Set<Role> Roles) {
+        super(UserId, Username, Password, User_Email, PhoneNumber, Roles);
 
     }
 
-    //setting all valid names of items.
+    // setting all valid names of items.
     private static boolean is_set = false;
-    public static void setvalidCat(Set<String> validCats){
-        if(!is_set){
+
+    public static void setvalidCat(Set<String> validCats) {
+        if (!is_set) {
             Admin.validCats = validCats;
             is_set = true;
         }
     }
-    //adding a new valid item to the avaliable items.
-    public static void addvaliCat(String name){
+
+    // adding a new valid item to the avaliable items.
+    public static void addvaliCat(String name) {
         Admin.validCats.add(name);
     }
 
-    public static double gettotalIncome(){
+    public static double gettotalIncome() {
         return Admin.totalIncome;
     }
 
-    public static void setTotalIncome(double newtotal){
+    public static void setTotalIncome(double newtotal) {
         Admin.totalIncome = newtotal;
     }
-    
+
     /**
-     * this function is the only way to set salary for any Employee in the pharmacy, need to think about preventing other's access
+     * this function is the only way to set salary for any Employee in the pharmacy,
+     * need to think about preventing other's access
      */
-    public static boolean setSalary(User user, double salary, Role role){
-        
-        if(user instanceof Pharmacist ){
-            ((Pharmacist) user).setSalary(salary, true );
+    public static boolean setSalary(User user, double salary, Role role) {
+
+        if (user instanceof Pharmacist) {
+            ((Pharmacist) user).setSalary(salary, true);
             return true;
-        }else if(user instanceof Casher ){
+        } else if (user instanceof Casher) {
             ((Casher) user).setSalary(salary, true);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public static boolean authorizeItem(Item item){
+    public static boolean authorizeItem(Item item) {
         // for it to work, then we will reimplement it.
-        for(String temp : Admin.validCats){
-            if(item.getCategory().toLowerCase() == temp.toLowerCase()){
+        for (String temp : Admin.validCats) {
+            if (item.getCategory().toLowerCase() == temp.toLowerCase()) {
                 return true;
             }
         }

@@ -1,0 +1,211 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.5 Chrome/134.0.6998.205 Electron/35.3.0 Safari/537.36" version="27.0.5">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Pharmacy Management System">
+    <mxGraphModel dx="1561" dy="1252" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-98" value="(I) UserServiceInterface" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="2870" y="140" width="240" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-99" value="Methods:&#xa;+ AddUser(User): int&#xa;+ UpdateUser(String, String, Object): int&#xa;+ DeleteUser(String): int&#xa;+ AuthenticateUser(User): boolean&#xa;+ GetByUsername(String): User&#xa;+ GetByID(int): User&#xa;+ GetInstance(): User_Service&#xa;+ setactive(boolean): void&#xa;+ getactive(): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-98">
+          <mxGeometry y="26" width="240" height="154" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-100" value="(I) PatientServiceInterface" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="2870" y="350" width="240" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-101" value="Methods:&#xa;+ AddPatient(Patient): int&#xa;+ RemovePatient(String): int&#xa;+ UpdatePatient(String, String, String, Object): int&#xa;+ GetPatient(String): Patient&#xa;+ GetAllPatients(): List&lt;Patient&gt;&#xa;+ GetPatientBalance(String): double&#xa;+ GetPatientOrders(int): List&lt;Order&gt;&#xa;+ PlaceOrder(Map&lt;String, Integer&gt;, int, Pharmacist): int&#xa;+ AuthenticatePatient(String, String): boolean&#xa;+ PlaceOrderByPrescription(int, int): int&#xa;+ GetInstance(): Patient_Service" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-100">
+          <mxGeometry y="26" width="240" height="214" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-102" value="(I) OrderServiceInterface" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="2880" y="630" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-103" value="Methods:&#xa;+ AddOrder(int, Order): int&#xa;+ DeleteOrder(int, int): int&#xa;+ UpdateOrderItems(int, boolean, Item): int&#xa;+ GetById(int): Order&#xa;+ GetByCustomer(String): List&lt;Order&gt;&#xa;+ CalcTotalIncome(): long&#xa;+ HandleReturn(int, String): int&#xa;+ GetInstance(): Order_Service" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-102">
+          <mxGeometry y="26" width="240" height="134" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-104" value="(I) PaymentServiceInterface" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="2880" y="1140" width="240" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-105" value="Methods:&#xa;+ AddPayment(int, Payment): int&#xa;+ WithdrawPayment(int, int): int&#xa;+ ProcessPayment(int, int): int&#xa;+ generateReceipt(int): String&#xa;+ UpdatePayment(int, String, Object): int&#xa;+ GetInstance(): Payment_service" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-104">
+          <mxGeometry y="26" width="240" height="114" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-106" value="(I) UserRepository" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="3210" y="160" width="240" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-107" value="Methods:&#xa;+ Add(User): int&#xa;+ Update(User): int&#xa;+ Delete(int): int&#xa;+ GetByUsername(String): User&#xa;+ GetByID(int): User&#xa;+ GetInstance(): User_Repository" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-106">
+          <mxGeometry y="26" width="240" height="114" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-108" value="(I) PatientRepository" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="3220" y="400" width="240" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-109" value="Methods:&#xa;+ AddPatient(Patient): int&#xa;+ RemovePatient(int): int&#xa;+ UpdatePatient(int, Patient): int&#xa;+ GetPatient(int): Patient&#xa;+ GetInstance(): Patient_Repository" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-108">
+          <mxGeometry y="26" width="240" height="114" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-110" value="(I) OrderRepository" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="3220" y="630" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-111" value="Methods:&#xa;+ AddOrder(int, Order): int&#xa;+ DeleteOrder(int, int): int&#xa;+ UpdateOrder(int, Order): int&#xa;+ GetByName(String): List&lt;Order&gt;&#xa;+ GetById(int): Order&#xa;+ GetHistory(): List&lt;Order&gt;&#xa;+ GetInstance(): Order_Repository" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-110">
+          <mxGeometry y="26" width="240" height="134" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-112" value="(I) ItemsRepository" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="3230" y="1140" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-113" value="Methods:&#xa;+ GetItemByName(String): Item&#xa;+ AddNewItem(Item): void&#xa;+ RemoveItemByName(String): void&#xa;+ UpdateItem(String, Item): void&#xa;+ GetAllItems(): List&lt;Item&gt;&#xa;+ GetNumberOfItems(): long&#xa;+ GetItemsByCategory(String): List&lt;Item&gt;&#xa;+ GetInstance(): Items_Repository" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-112">
+          <mxGeometry y="26" width="240" height="134" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-115" value="uses" style="endArrow=open;endFill=1;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="0HJmh_fNqDepfFOPeEAj-98" target="0HJmh_fNqDepfFOPeEAj-106">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="2970" y="550" as="sourcePoint" />
+            <mxPoint x="3020" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-116" value="uses" style="endArrow=open;endFill=1;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="0HJmh_fNqDepfFOPeEAj-100" target="0HJmh_fNqDepfFOPeEAj-108">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="2970" y="550" as="sourcePoint" />
+            <mxPoint x="3020" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-117" value="uses" style="endArrow=open;endFill=1;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="0HJmh_fNqDepfFOPeEAj-102" target="0HJmh_fNqDepfFOPeEAj-110">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="2970" y="550" as="sourcePoint" />
+            <mxPoint x="3020" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-118" value="(A) User" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1810" y="10" width="240" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-119" value="Attributes:&#xa;- static int UserId&#xa;- String Username&#xa;- String Password&#xa;- String UserEmail&#xa;- String PhoneNumber&#xa;- boolean isActive&#xa;# Set&lt;Role&gt; Roles&#xa;&#xa;Methods:&#xa;+ getID(): int&#xa;+ getUsername(): String&#xa;+ getPassword(): String&#xa;+ getUserEmail(): String&#xa;+ getPhoneNumber(): String&#xa;+ getactive(): boolean&#xa;+ setID(int): void&#xa;+ setUsername(String): void&#xa;+ setPassword(String): void&#xa;+ setUserEmail(String): void&#xa;+ setPhoneNumber(String): void&#xa;+ setactive(boolean): void&#xa;+ CheckRole(Role): boolean&#xa;+ Add_Role(Role): void&#xa;+ Remove_Role(Role): boolean&#xa;+ toString(): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=none;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-118">
+          <mxGeometry y="26" width="240" height="374" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-120" value="(C) Admin" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1500" y="500" width="260" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-121" value="Attributes:&#xa;- static Set&lt;String&gt; validCats&#xa;- static double totalIncome&#xa;&#xa;Methods:&#xa;+ static setSalary(User, double, Role): boolean&#xa;+ static authorizeItem(Item): boolean&#xa;+ static setvalidCat(Set&lt;String&gt;): void&#xa;+ static addvaliCat(String): void&#xa;+ static gettotalIncome(): double&#xa;+ static setTotalIncome(double): void&#xa;+ equals(Object): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-120">
+          <mxGeometry y="26" width="260" height="184" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-122" value="(C) Pharmacist" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="2180" y="500" width="240" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-123" value="Attributes:&#xa;- double salary&#xa;&#xa;Methods:&#xa;+ setSalary(double, boolean): int&#xa;+ getSalary(): double&#xa;+ is_safe(Item, Patient): boolean&#xa;+ calculateAnnualSalary(): double&#xa;+ equals(Object): boolean&#xa;+ toString(): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-122">
+          <mxGeometry y="26" width="240" height="154" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-124" value="(C) Cashier" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1810" y="505" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-125" value="Attributes:&#xa;- double salary&#xa;&#xa;Methods:&#xa;+ setSalary(double, boolean): int&#xa;+ getSalary(): double&#xa;+ equals(Object): boolean&#xa;+ toString(): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-124">
+          <mxGeometry y="26" width="240" height="134" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-126" value="(C) Role" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="2300" y="75" width="290" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-127" value="&lt;b&gt;Attributes:&lt;/b&gt;&#xa;- String ID&#xa;- String RoleName&#xa;- int PermissionsLevel&#xa;- String Description&#xa;&#xa;&lt;b&gt;Methods:&lt;/b&gt;&#xa;+ getID(): String&#xa;+ getRoleName(): String&#xa;+ getPermissionsLevel(): int&#xa;+ getDescription(): String&#xa;+ setID(String): void&#xa;+ setRoleName(String): void&#xa;+ setPermissionsLevel(int): void&#xa;+ setDescription(String): void&#xa;+ equals(Object): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-126">
+          <mxGeometry y="26" width="290" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-128" value="(C) Item" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="2120" y="1190" width="240" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-129" value="Attributes:&#xa;- int quantity&#xa;- double price&#xa;- String category&#xa;- String medic_name&#xa;- String expire_date&#xa;- String usage&#xa;- boolean is_refundable&#xa;- Set&lt;String&gt; healing_effects&#xa;- Set&lt;String&gt; side_effects&#xa;&#xa;Methods:&#xa;+ getPrice(): double&#xa;+ getMedicName(): String&#xa;+ getCategory(): String&#xa;+ getExpireDate(): String&#xa;+ getQuantity(): int&#xa;+ getUsage(): String&#xa;+ getSideEffects(): Set&lt;String&gt;&#xa;+ getHealingEffects(): Set&lt;String&gt;&#xa;+ is_Refundable(): boolean&#xa;+ setPrice(double): void&#xa;+ setMedicName(String): void&#xa;+ setCategory(String): void&#xa;+ setExpireDate(String): void&#xa;+ setQuantity(int): void&#xa;+ setUsage(String): void&#xa;+ setSideEffects(Set&lt;String&gt;): void&#xa;+ setHealingEffects(Set&lt;String&gt;): void&#xa;+ set_refundable(boolean): void&#xa;+ toString(): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-128">
+          <mxGeometry y="26" width="240" height="454" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-130" value="(C) Order" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1550" y="1220" width="240" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-131" value="Attributes:&#xa;- int orderId&#xa;- String orderDate&#xa;- String checkedBy&#xa;- double totalPrice&#xa;- String status&#xa;- List&lt;Item&gt; orderItems&#xa;&#xa;Methods:&#xa;+ getOrderId(): int&#xa;+ getOrderDate(): String&#xa;+ getCheckedBy(): String&#xa;+ getTotalPrice(): double&#xa;+ getStatus(): String&#xa;+ getOrderItems(): List&lt;Item&gt;&#xa;+ setOrderId(int): void&#xa;+ setOrderDate(String): void&#xa;+ setCheckedBy(String): void&#xa;+ setTotalPrice(double): void&#xa;+ setStatus(String): void&#xa;+ setOrderItems(List&lt;Item&gt;): void&#xa;+ addItem(Item): void&#xa;+ removeItem(Item): void&#xa;+ clearOrder(): void&#xa;+ completeOrder(): void&#xa;+ cancelOrder(): void&#xa;+ toString(): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-130">
+          <mxGeometry y="26" width="240" height="394" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-132" value="(C) Payment" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1110" y="1250" width="240" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-133" value="Attributes:&#xa;- int ID&#xa;- double amount&#xa;- String payday&#xa;- String Paymethod&#xa;- String status&#xa;- Order order&#xa;&#xa;Methods:&#xa;+ getID(): int&#xa;+ getAmount(): double&#xa;+ getPayday(): String&#xa;+ getPaymethod(): String&#xa;+ getStatus(): String&#xa;+ getOrder(): Order&#xa;+ setID(int): void&#xa;+ setAmount(double): void&#xa;+ setPayday(String): void&#xa;+ setPaymethod(String): void&#xa;+ setStatus(String): void&#xa;+ setOrder(Order): void&#xa;+ toString(): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-132">
+          <mxGeometry y="26" width="240" height="334" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-138" value="" style="endArrow=block;endFill=1;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="0HJmh_fNqDepfFOPeEAj-118" target="0HJmh_fNqDepfFOPeEAj-120">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="2570" y="550" as="sourcePoint" />
+            <mxPoint x="2620" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-139" value="" style="endArrow=block;endFill=1;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="0HJmh_fNqDepfFOPeEAj-118" target="0HJmh_fNqDepfFOPeEAj-122">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="2570" y="550" as="sourcePoint" />
+            <mxPoint x="2620" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-140" value="" style="endArrow=block;endFill=1;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" target="0HJmh_fNqDepfFOPeEAj-124">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1930" y="410" as="sourcePoint" />
+            <mxPoint x="2620" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-141" value="has" style="endArrow=open;endFill=1;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="0HJmh_fNqDepfFOPeEAj-118" target="0HJmh_fNqDepfFOPeEAj-126">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="2570" y="550" as="sourcePoint" />
+            <mxPoint x="2620" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-142" value="contains" style="endArrow=open;endFill=1;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="0HJmh_fNqDepfFOPeEAj-130" target="0HJmh_fNqDepfFOPeEAj-128">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1950" y="480" as="sourcePoint" />
+            <mxPoint x="2000" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-143" value="has" style="endArrow=open;endFill=1;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="0HJmh_fNqDepfFOPeEAj-132" target="0HJmh_fNqDepfFOPeEAj-130">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1950" y="480" as="sourcePoint" />
+            <mxPoint x="2000" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-145" value="(C) Patient" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1200" y="500" width="240" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-146" value="Attributes:&#xa;- float Age&#xa;- String address&#xa;- Set&lt;String&gt; allergies&#xa;- List&lt;Order&gt; orders&#xa;- double PatientBalance&#xa;&#xa;Methods:&#xa;+ getAge(): float&#xa;+ setAge(float): void&#xa;+ getAddress(): String&#xa;+ setAddress(String): void&#xa;+ getAllergies(): Set&lt;String&gt;&#xa;+ setAllergies(Set&lt;String&gt;): void&#xa;+ Add_allergy(String): void&#xa;+ Remove_allergy(String): boolean&#xa;+ Add_order(Order): void&#xa;+ Remove_order(Order): boolean&#xa;+ getOrders(): List&lt;Order&gt;&#xa;+ SetBalance(double): void&#xa;+ GetBalance(): double&#xa;+ equals(Object): boolean&#xa;+ toString(): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-145">
+          <mxGeometry y="26" width="240" height="334" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-164" value="" style="endArrow=block;endFill=1;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1950" y="410" as="sourcePoint" />
+            <mxPoint x="1310" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-167" value="(C) Prescription" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1620" y="800" width="240" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-168" value="Attributes:&#xa;- int ID&#xa;- String PatientName&#xa;- Pharmacist issuedBy&#xa;- String status&#xa;- Set&lt;Item&gt; items&#xa;&#xa;Methods:&#xa;+ getId(): int&#xa;+ setID(int): void&#xa;+ getStatus(): String&#xa;+ setStatus(String): void&#xa;+ getPatientName(): String&#xa;+ setPatientName(String): void&#xa;+ getIssuedBy(): Pharmacist&#xa;+ setIssuedBy(Pharmacist): void&#xa;+ getItems(): Set&lt;Item&gt;&#xa;+ setItems(Set&lt;Item&gt;): void&#xa;+ Add_Item(Item): void&#xa;+ Remove_Item(Item): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-167">
+          <mxGeometry y="26" width="240" height="314" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-169" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;issued by&lt;/b&gt;&lt;/font&gt;" style="endArrow=open;endFill=1;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.535;entryY=1.037;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="0HJmh_fNqDepfFOPeEAj-167" target="0HJmh_fNqDepfFOPeEAj-123">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="420" as="sourcePoint" />
+            <mxPoint x="1090" y="900" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-170" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;&lt;b&gt;contains&lt;/b&gt;&lt;/font&gt;" style="endArrow=open;endFill=1;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="0HJmh_fNqDepfFOPeEAj-168" target="0HJmh_fNqDepfFOPeEAj-128">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1220" y="1540" as="sourcePoint" />
+            <mxPoint x="2200" y="1140" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="2230" y="1140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-171" value="(I) PrescriptionServiceInterface" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="2880" y="870" width="240" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-172" value="Methods:&#xa;+ AddPrescription(Prescription): int&#xa;+ UpdatePrescription(String, String, Object): int&#xa;+ DeletePrescription(String): int&#xa;+ GetByID(int): Prescription&#xa;+ GetInstance(): Prescription_Service&#xa;+ setactive(boolean): void&#xa;+ getactive(): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-171">
+          <mxGeometry y="26" width="240" height="174" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-173" value="(I) PrescriptionRepository" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="3220" y="890" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-174" value="Methods:&#xa;+ Add(Prescription): int&#xa;+ Update(Prescription): int&#xa;+ Delete(int): int&#xa;+ GetByID(int): Prescription&#xa;+ GetInstance(): Prescription_Repository" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0HJmh_fNqDepfFOPeEAj-173">
+          <mxGeometry y="26" width="240" height="134" as="geometry" />
+        </mxCell>
+        <mxCell id="0HJmh_fNqDepfFOPeEAj-175" value="uses" style="endArrow=open;endFill=1;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="0HJmh_fNqDepfFOPeEAj-171" target="0HJmh_fNqDepfFOPeEAj-173">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="3150" y="440" as="sourcePoint" />
+            <mxPoint x="3200" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

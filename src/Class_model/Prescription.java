@@ -14,14 +14,15 @@ public class Prescription {
     private Set<Item> items = new HashSet<>(); // The set of items included in the prescription.
 
     /**
-     * Constructs a Prescription object with the specified patient name, issuing pharmacist, and items.
+     * Constructs a Prescription object with the specified patient name, issuing
+     * pharmacist, and items.
      * The initial status is set to "Pending".
      *
      * @param PatientName The name of the patient.
-     * @param issuedBy The pharmacist who issued the prescription.
-     * @param items The set of items included in the prescription.
+     * @param issuedBy    The pharmacist who issued the prescription.
+     * @param items       The set of items included in the prescription.
      */
-    public Prescription(int ID, String PatientName, Pharmacist issuedBy, Set<Item> items){
+    public Prescription(int ID, String PatientName, Pharmacist issuedBy, Set<Item> items) {
         this.ID = ID;
         this.PatientName = PatientName;
         this.issuedBy = issuedBy;
@@ -31,7 +32,8 @@ public class Prescription {
 
     /**
      * Sets ID for patient.
-     * @param ID  The new ID of the patient;
+     * 
+     * @param ID The new ID of the patient;
      */
     public void setID(int ID) {
         this.ID = ID;
@@ -39,9 +41,10 @@ public class Prescription {
 
     /**
      * Gets ID for patient.
+     * 
      * @return the ID of the patient.
      */
-    public int getId(){
+    public int getId() {
         return ID;
     }
 
@@ -50,7 +53,7 @@ public class Prescription {
      *
      * @return The status of the prescription.
      */
-    public String getStatus(){
+    public String getStatus() {
         return status;
     }
 
@@ -59,7 +62,7 @@ public class Prescription {
      *
      * @param status The new status of the prescription.
      */
-    public void setStatus(String status){
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -122,7 +125,7 @@ public class Prescription {
      *
      * @param item The item to be added.
      */
-    public void Add_Item(Item item){
+    public void Add_Item(Item item) {
         items.add(item);
     }
 
@@ -132,7 +135,7 @@ public class Prescription {
      * @param item The item to be removed.
      * @return True if the item was successfully removed, false otherwise.
      */
-    public boolean Remove_Item(Item item){
+    public boolean Remove_Item(Item item) {
         return items.remove(item);
     }
 }
