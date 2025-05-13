@@ -62,6 +62,12 @@ Repositories handle data persistence:
    - Receipts are generated
    - Payment records are stored
 
+## Testing results on backend code
+
+
+![Example Image](images/Test.png)
+
+
 ## Benefits
 
 - **Simplified Architecture**: No web controllers or complex dependencies
