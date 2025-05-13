@@ -9,7 +9,7 @@ import Class_model.Patient;
  * The PatientRepository interface defines the contract for managing patient records.
  * It provides methods to add, remove, update, retrieve, Get, and list patients.
  */
-interface PatientRepository {
+abstract interface PatientRepository {
 
     /**
      * Adds a new patient to the repository.
@@ -71,12 +71,7 @@ class Patient_Repository implements PatientRepository {
     //works fine
     @Override
     public int AddPatient(Patient patient)  throws IllegalArgumentException{
-        if(patient == null || patient.getUsername() == null || patient.getPassword()== null) throw new IllegalArgumentException("Patient cannot be null");
-        for(Patient p :PATIENTS){
-            if(p.getID() == patient.getID() || p.getUsername() == patient.getUsername()){
-                return -1;
-            }
-        }
+        if(patient == null || !(patient instanceof Patient)) throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
         if(!PATIENTS.contains(patient)){
             PATIENTS.add(patient);
             return patient.getID();

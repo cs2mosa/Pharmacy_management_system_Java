@@ -11,11 +11,11 @@ import java.util.List;
  *       withdrawal is differnt from deletion in Payment_Repository.
  * NOTE : Payment Id should be the same as Order Id.
  */
-interface PaymentServiceInterface {
+abstract interface PaymentServiceInterface {
 
     /**
      * Adds a new payment to the repository.
-     * @param PatientId The unique identifier of the patient associated with the payment.
+     * 
      * @param payment The Payment object to be added.
      * @return payment id on success, -1 else.
      */

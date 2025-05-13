@@ -1,9 +1,6 @@
 package Service_Interfaces;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 /*
  * we need to implement singleton design pattern in every repository here.
  */
@@ -15,7 +12,7 @@ import Class_model.Item;
  * It provides methods to add, remove, update, and retrieve items, as well as query items by category
  * and get the total number of items.
  */
-interface ItemsRepository {
+abstract interface ItemsRepository {
     
     /**
      * retrives item based on its name.
@@ -37,8 +34,8 @@ interface ItemsRepository {
 
     /**
      * Updates an existing item in the repository based on a query and a new value.
-     * @param itemName The name of the item to be updated.
-     * @param newItem The new item to replace the old item.
+     * @param itemName name of the item to be updated
+     * @param newItem  the updated item to register
      */
     void UpdateItem(String itemName, Item newItem);
 
@@ -78,14 +75,18 @@ class Items_Repository implements ItemsRepository{
     public static Items_Repository GetInstance(){
         if(instance == null){
             instance = new Items_Repository();
+            return instance;
         }
-        return instance;
+        else{
+            return instance;
+        }
     }
 
     @Override
     public Item GetItemByName(String ItemName){
+        if(ItemName == null) return null;
         for(Item itm : ITEMS){
-            if(itm.getMedicName() == ItemName){
+            if(itm.getMedicName().equals(ItemName)){
                 return itm;
             }
         }
@@ -94,11 +95,13 @@ class Items_Repository implements ItemsRepository{
 
     @Override
     public void AddNewItem(Item item){
+        if(item == null || GetItemByName(item.getMedicName()) != null) throw new IllegalArgumentException("Item already exists or null item");
         ITEMS.add(item); // Adds the item to the set
     }
 
     @Override
     public void RemoveItemByName(String Itemname){
+        if(Itemname == null) throw new IllegalArgumentException("Item name cannot be null");
         Item temp  = GetItemByName(Itemname);
         if(temp != null){
             ITEMS.remove(temp);
@@ -124,9 +127,8 @@ class Items_Repository implements ItemsRepository{
     @Override
     public List<Item> GetItemsByCategory(String category){
         List<Item> templist = new ArrayList<>();
-        if(ITEMS.isEmpty())return new ArrayList<>();
         for(Item itm : ITEMS){
-            if(itm.getCategory() == category){
+            if(itm.getMedicName().equals(category)){
                 templist.add(itm);
             }
         }

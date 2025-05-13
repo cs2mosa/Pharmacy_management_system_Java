@@ -9,7 +9,7 @@ import Class_model.Item;
  * This interface defines the contract for order-related operations.
  * It provides methods for placing, deleting, updating, retrieving, and calculating orders.
  */
-interface OrderServiceInterface {
+abstract interface OrderServiceInterface {
 
     /**
      * Adds a new order to the repository.

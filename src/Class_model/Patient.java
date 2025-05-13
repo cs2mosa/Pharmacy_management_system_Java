@@ -197,28 +197,4 @@ public class Patient extends User {
         return this.orders;
     }
     
-    @Override
-    public String toString() {
-        return "Patient{" +
-                "Age=" + Age +
-                ", address='" + address + '\'' +
-                ", allergies=" + allergies +
-                ", orders=" + orders +
-                ", PatientBalance=" + PatientBalance +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Patient)) return false;
-        Patient patient = (Patient) obj;
-        return Float.compare(patient.Age, Age) == 0 &&
-            Double.compare(patient.PatientBalance, PatientBalance) == 0 &&
-            address.equals(patient.address) &&
-            allergies.equals(patient.allergies) &&
-            orders.equals(patient.orders)
-            && getUsername().equals(patient.getUsername()) &&
-            getPassword().equals(patient.getPassword());
-    }
 }

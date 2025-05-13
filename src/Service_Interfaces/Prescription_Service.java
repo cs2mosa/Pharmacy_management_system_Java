@@ -3,6 +3,7 @@ package Service_Interfaces;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import Class_model.*;
@@ -11,7 +12,7 @@ import Class_model.*;
  * This interface defines the contract for managing prescriptions in the system.
  * It provides methods for adding, deleting, updating, retrieving, and filling prescriptions.and others
  */
-interface PrescriptionServiceInterface {
+abstract interface PrescriptionServiceInterface {
 
     /**
      * Adds a new prescription to the system.
@@ -98,9 +99,11 @@ public class Prescription_Service implements PrescriptionServiceInterface {
     }
     public static Prescription_Service getInstance(){
         if(instance == null){
-            instance = new Prescription_Service();
+            return new Prescription_Service();
         }
-        return instance;
+        else{
+            return instance;
+        }
     }
 
     //works fine

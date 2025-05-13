@@ -18,7 +18,7 @@ import Class_model.Order;
  * It provides methods to add, remove, update, and retrieve patient information,
  * as well as manage patient balances and orders.
  */
-interface PatientServiceInterface {
+abstract interface PatientServiceInterface {
 
     /**
      * Adds a new patient to the system.
@@ -90,8 +90,8 @@ interface PatientServiceInterface {
     boolean AuthenticatePatient(String PatientName, String Password);
 
     /**
-     * Places an order based on a prescription. you should validate the prescription first as this method doesnt handle invalid prescriptions
-     * @see Prescription_Service for more details Checking validity.
+     * Places an order based on a prescription. you should validate the prescription first as this method doesnt hande invalid presciptions
+     * @see Prescription_Service for more details about Checking validity.
      * @param PatientId The ID of the patient placing the order.
      * @param PreID The ID of the prescription.
      * @return The ID of the placed order if placed correctly, -1 else.
@@ -292,13 +292,12 @@ public class Patient_Service implements PatientServiceInterface {
         try {
             Prescription temp1 = Prescription_Service.getInstance().getPreById(PreID);
             Patient temp2 = Patient_Repository.getInstance().GetPatient(PatientId);
-            System.out.println("here is fine");
             if (temp2 == null )throw new IllegalArgumentException("Patient not found, you should add patient first or check the id");
             if (temp1 == null )throw new IllegalArgumentException("Prescription not found, you should add Prescription first or check the id");
             if(temp1.getItems() ==null) throw new IllegalArgumentException("Prescription has no items, failed to fetch items");
             Order order = new Order.builder()
                     .setOrderItems(new ArrayList<>(temp1.getItems()))
-                    .setOrderId(PreID)
+                    .setOrderId(new Random().nextInt(50000))
                     .setStatus("Pending")
                     .build();
             /* should be tested*/
@@ -310,11 +309,8 @@ public class Patient_Service implements PatientServiceInterface {
             if (Order_Service.getInstance().AddOrder(PatientId, order) > 0) {
                 temp2.Add_order(order);
                 System.out.println("order added");
-                return order.getOrderId();
-            }else{ 
-                return -1;
             }
-           
+            return order.getOrderId();
         } catch (Exception e) {
             System.err.println("Error placing order by prescription: " + e.getMessage());
             return -1;
@@ -333,11 +329,10 @@ public class Patient_Service implements PatientServiceInterface {
             if (items == null || items.isEmpty())
                 throw new IllegalArgumentException("no items has been found, failed to place the order");
             Iterator<Map.Entry<String, Integer>> it = items.entrySet().iterator();
-
+            double totalprice = 0.0;
             while (it.hasNext()) {
                 Map.Entry<String, Integer> temp = it.next();
                 Item tempitem = Inventory_service.getInstance().GetItemByName(temp.getKey());
-                System.out.println();
                 if (tempitem == null)
                     throw new IllegalArgumentException("item "+ temp.getKey() +" has not been found, failed to place the order");
                 if (tempitem.getQuantity() < temp.getValue())
@@ -347,11 +342,13 @@ public class Patient_Service implements PatientServiceInterface {
                 
                 tempitems.add(tempitem);
                 Inventory_service.getInstance().updateStock(tempitem.getMedicName(), tempitem.getQuantity() - temp.getValue());
+                totalprice += tempitem.getPrice() * temp.getValue();
             }
             Order order = new Order.builder()
                     .setOrderId(new Random().nextInt(50000))
                     .setStatus("Pending")
                     .setOrderItems(tempitems)
+                    .setTotalPrice(totalprice)
                     .build();
 
             if (Order_Repository.getInstance().AddOrder(PatientId, order) > 0 && Prescription_Service.getInstance().IssuePrescription(pharmacist, PatientId, order.getOrderId()) > 0) {

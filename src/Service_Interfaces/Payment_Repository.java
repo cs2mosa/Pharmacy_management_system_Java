@@ -12,11 +12,10 @@ import Class_model.*;
  * It provides methods to add, withdraw, update, and retrieve payment details.
  * NOTE : Payment Id should be the same as Order Id.
  */
-interface PaymentRepository {
+abstract interface PaymentRepository {
 
     /**
      * Adds a new payment to the repository.
-     * @param PatientId The unique identifier of the patient associated with the payment.
      * @param payment The Payment object to be added.
      * @return payment id on successs, -1 else
      */
@@ -78,10 +77,12 @@ class Payment_Repository implements PaymentRepository {
     // Method to get the singleton instance of Payment_Repository
     public static PaymentRepository GetInstance(){
         if(instance ==null){
-            instance  =  new Payment_Repository();  
+            instance  =  new Payment_Repository();
+            return instance;
         }
-        return instance;
-        
+        else{
+            return instance;
+        }
     }
 
     //works fine

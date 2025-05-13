@@ -3,6 +3,7 @@ package Service_Interfaces;
 import java.util.HashSet;
 import java.util.Set;
 
+import Class_model.Casher;
 import Class_model.Pharmacist;
 import Class_model.User;
 
@@ -10,7 +11,7 @@ import Class_model.User;
  * UserRepository is an interface that defines the contract for managing User entities.
  * It provides methods to add, update, delete, and retrieve users by their username or ID.
  */
-interface UserRepository {
+abstract interface UserRepository {
 
     /**
      * Adds a new user to the repository.
@@ -65,9 +66,10 @@ class User_Repository implements UserRepository {
     public static User_Repository GetInstance(){
         if (instance == null) {
             instance = new User_Repository();
-        } 
-        return instance;
-        
+            return instance;
+        } else {
+            return instance;
+        }
     }
 
     @Override
@@ -79,6 +81,8 @@ class User_Repository implements UserRepository {
         if(!USERS.contains(user) && GetByUsername(user.getUsername()) == null) {
             if(user instanceof Pharmacist){
                 USERS.add((Pharmacist)user);
+            }else if(user instanceof Casher){
+                USERS.add((Casher)user);
             }
             return user.getID();
         }else{
